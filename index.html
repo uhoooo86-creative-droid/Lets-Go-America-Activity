@@ -1,0 +1,2379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>🇺🇸 USA Travel English Adventure</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════
+   USA TRAVEL ENGLISH  —  Adventure Game UI
+   Inspired by cute Korean edutainment apps
+════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  /* Sky & background */
+  --sky1:#7EC8E3;--sky2:#A8DDF0;--sky3:#D4F0FF;
+  /* Warm card tones */
+  --cream:#FFF9EE;--card:#FFFCF4;--warm:#FFF0D4;--warm2:#FFE4B0;
+  /* Action orange (main CTA) */
+  --ora1:#FF8C00;--ora2:#FFA726;--ora3:#FFD580;
+  /* Red accent */
+  --red1:#FF4757;--red2:#FF6B81;
+  /* Green success */
+  --grn1:#2ED573;--grn2:#7BED9F;
+  /* Gold star */
+  --gld1:#FFD700;--gld2:#FFC107;
+  /* Text */
+  --ink:#3A2410;--muted:#9B7B5C;--pale:#C8B89A;
+  /* Radius */
+  --r:18px;--rL:26px;--rXL:34px;
+  /* Shadow */
+  --sh:0 6px 0 rgba(0,0,0,.12);
+  --shM:0 8px 24px rgba(0,0,0,.14);
+}
+
+html,body{height:100%;overflow:hidden;font-family:'Baloo 2','Nunito',sans-serif;color:var(--ink);}
+
+/* ══ SKY BACKGROUND ══ */
+.sky-bg{
+  position:fixed;inset:0;z-index:-1;
+  background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 55%,var(--sky3) 100%);
+}
+/* fluffy cloud decorations */
+.sky-bg::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 120px 70px at 10% 18%, rgba(255,255,255,.55) 0%, transparent 70%),
+    radial-gradient(ellipse 90px 55px at 22% 14%, rgba(255,255,255,.45) 0%, transparent 70%),
+    radial-gradient(ellipse 140px 80px at 78% 10%, rgba(255,255,255,.5) 0%, transparent 70%),
+    radial-gradient(ellipse 80px 50px at 88% 6%,  rgba(255,255,255,.4) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* ══ SCREENS ══ */
+.screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;
+         opacity:0;pointer-events:none;transition:opacity .25s;
+         -webkit-overflow-scrolling:touch;}
+.screen.active{opacity:1;pointer-events:auto;}
+.screen-inner{min-height:100%;padding-bottom:40px;}
+
+/* ══════════════════════════════
+   HOME SCREEN
+══════════════════════════════ */
+
+/* ── Top banner ── */
+.home-banner{
+  padding:22px 18px 14px;
+  text-align:center;
+  position:relative;
+}
+.home-plane{
+  font-size:2rem;
+  display:inline-block;
+  animation:planeFly 3s ease-in-out infinite;
+  margin-bottom:4px;
+}
+@keyframes planeFly{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-8px) rotate(5deg);}}
+.home-title{
+  font-size:1.75rem;font-weight:900;line-height:1.15;
+  color:#fff;
+  text-shadow:0 3px 0 rgba(120,60,0,.25),0 0 24px rgba(255,200,80,.5);
+  letter-spacing:.02em;
+}
+.home-title em{color:var(--gld1);font-style:normal;}
+.home-sub{
+  font-size:.85rem;font-weight:700;color:rgba(255,255,255,.88);
+  letter-spacing:.03em;margin-top:4px;
+}
+
+/* ── Player card ── */
+.player-card{
+  margin:0 14px 12px;
+  background:var(--card);
+  border-radius:var(--rXL);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:var(--shM),0 -2px 0 rgba(255,255,255,.9) inset;
+  border:3px solid rgba(255,200,80,.3);
+}
+.player-avatar{
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,#FFE4B5,#FFDAB9);
+  border:3px solid var(--gld2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.75rem;flex-shrink:0;
+  box-shadow:0 4px 0 rgba(200,140,0,.25);
+}
+.player-name{font-size:1rem;font-weight:900;color:var(--ink);}
+.xp-row{display:flex;align-items:center;gap:8px;margin-top:5px;}
+.xp-track{flex:1;height:11px;background:rgba(200,180,140,.25);border-radius:99px;overflow:hidden;border:2px solid rgba(200,160,80,.2);}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--ora2),var(--gld1));border-radius:99px;transition:width .6s;box-shadow:0 0 6px rgba(255,190,0,.5);}
+.xp-txt{font-size:.68rem;font-weight:900;color:var(--muted);white-space:nowrap;}
+.lv-badge{
+  background:linear-gradient(135deg,var(--ora1),var(--ora2));
+  color:#fff;font-weight:900;font-size:.85rem;
+  padding:7px 15px;border-radius:999px;white-space:nowrap;
+  box-shadow:0 4px 0 rgba(180,80,0,.3);
+}
+
+/* ── Map section ── */
+.map-sec{margin:0 14px 12px;}
+.map-sec-label{
+  font-weight:900;font-size:.95rem;color:#fff;
+  margin-bottom:8px;display:flex;align-items:center;gap:6px;
+  text-shadow:0 2px 4px rgba(0,0,0,.15);
+}
+.map-box{
+  background:var(--card);
+  border-radius:var(--rXL);
+  padding:10px;
+  box-shadow:var(--shM),0 -3px 0 rgba(255,255,255,.8) inset;
+  border:3px solid rgba(255,200,80,.25);
+}
+
+/* ── Legend ── */
+.legend{display:flex;justify-content:center;gap:18px;margin:10px 0 8px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:.75rem;font-weight:900;color:rgba(255,255,255,.9);}
+.leg-dot{width:13px;height:13px;border-radius:50%;border:2.5px solid rgba(255,255,255,.5);flex-shrink:0;}
+
+/* ── Continue card (big orange CTA) ── */
+.continue-card{
+  margin:0 14px 14px;
+  background:linear-gradient(135deg,var(--ora1) 0%,#FF6B00 100%);
+  border-radius:var(--rXL);padding:18px 20px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:0 8px 0 rgba(180,60,0,.3),var(--shM);
+  cursor:pointer;border:none;width:100%;text-align:left;
+  transition:transform .12s,box-shadow .12s;
+}
+.continue-card:active{transform:translateY(3px);box-shadow:0 4px 0 rgba(180,60,0,.3);}
+.cc-emoji{font-size:2.4rem;flex-shrink:0;}
+.cc-info{flex:1;min-width:0;}
+.cc-city{font-size:1.1rem;font-weight:900;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.cc-desc{font-size:.75rem;font-weight:700;color:rgba(255,255,255,.82);margin-top:2px;}
+.cc-arr{color:rgba(255,255,255,.7);font-size:1.5rem;}
+
+/* ══════════════════════════════
+   STAGE SCREEN
+══════════════════════════════ */
+.stage-hud{
+  background:linear-gradient(135deg,var(--ora1),var(--ora2));
+  padding:13px 16px;
+  display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:10;
+  box-shadow:0 5px 0 rgba(180,80,0,.25);
+}
+.hud-back{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.22);border:2.5px solid rgba(255,255,255,.45);
+  color:#fff;font-size:1.3rem;font-weight:900;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.hud-city-nm{flex:1;font-weight:900;font-size:1.05rem;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.hud-xp{
+  background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.38);
+  border-radius:999px;padding:5px 13px;
+  font-weight:900;font-size:.82rem;color:#fff;
+}
+
+/* Stage hero */
+.stage-hero{
+  margin:14px;border-radius:var(--rXL);overflow:hidden;
+  box-shadow:var(--shM);position:relative;
+}
+.stage-hero-content{padding:24px 20px;text-align:center;position:relative;}
+.stage-hero-emoji{font-size:3.5rem;margin-bottom:8px;display:block;}
+.stage-hero-city{
+  font-size:1.9rem;font-weight:900;color:#fff;
+  text-shadow:0 3px 8px rgba(0,0,0,.25);
+}
+.stage-hero-sub{font-size:.8rem;font-weight:700;color:rgba(255,255,255,.82);margin:4px 0 14px;}
+.prog-row{display:flex;align-items:center;gap:10px;max-width:280px;margin:0 auto;}
+.prog-track{flex:1;height:14px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden;border:2px solid rgba(255,255,255,.3);}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gld1),#FFF176);box-shadow:0 0 8px rgba(255,220,0,.6);transition:width .6s;}
+.prog-txt{font-weight:900;font-size:.85rem;color:#fff;white-space:nowrap;}
+
+/* Week labels */
+.week-hd{margin:14px 14px 8px;}
+.week-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 16px;border-radius:999px;
+  font-weight:900;font-size:.8rem;color:#fff;
+  box-shadow:0 3px 0 rgba(0,0,0,.13);
+}
+
+/* Mission items */
+.mission-item{
+  display:flex;align-items:center;gap:13px;
+  background:var(--card);
+  margin:0 14px 10px;
+  padding:13px 15px;
+  border-radius:var(--rXL);
+  cursor:pointer;
+  box-shadow:0 5px 0 rgba(0,0,0,.09),0 2px 14px rgba(0,0,0,.06);
+  border:2.5px solid rgba(255,200,80,.18);
+  position:relative;overflow:hidden;
+  touch-action:manipulation;
+  transition:transform .12s,box-shadow .12s;
+}
+.mission-item::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,transparent 100%);
+  pointer-events:none;border-radius:var(--rXL) var(--rXL) 0 0;
+}
+.mission-item:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.09);}
+.mission-item.cleared{background:linear-gradient(135deg,#F0FDF6,#DCFAEC);border-color:rgba(46,213,115,.28);}
+.mission-item.current{border-color:var(--ora2);box-shadow:0 5px 0 rgba(255,150,0,.22),0 2px 16px rgba(255,150,0,.14);}
+.mission-item.locked{opacity:.5;cursor:default;}
+.mission-icon-wrap{
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.55rem;flex-shrink:0;
+  box-shadow:0 3px 0 rgba(0,0,0,.13);
+}
+.mission-info{flex:1;min-width:0;}
+.mission-title{font-size:.96rem;font-weight:900;color:var(--ink);margin-bottom:2px;}
+.mission-desc{font-size:.7rem;font-weight:700;color:var(--muted);}
+.rev-badge{
+  background:var(--ora2);color:#fff;
+  font-size:.62rem;font-weight:900;
+  padding:3px 8px;border-radius:999px;
+  vertical-align:middle;
+}
+.play-btn{
+  width:38px;height:38px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--ora1),var(--ora2));
+  color:#fff;font-size:1rem;cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 0 rgba(180,80,0,.28);
+  position:relative;z-index:1;
+}
+
+/* ══ GAME SCREEN ══ */
+#gameTop{position:sticky;top:0;z-index:10;}
+.game-hud{
+  background:transparent;padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+}
+.game-hud-title{flex:1;font-weight:900;font-size:1rem;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+
+.game-body{padding:16px;min-height:calc(100vh - 100px);}
+
+/* ── Common card ── */
+.g-card{
+  background:var(--card);border-radius:var(--rXL);padding:20px;
+  box-shadow:var(--shM);border:2.5px solid rgba(255,200,80,.18);margin-bottom:12px;
+}
+.g-card-center{text-align:center;}
+.g-emoji{font-size:3.5rem;margin-bottom:10px;display:block;}
+
+/* ── Flip ── */
+.flip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:2px;}
+.flip-card{aspect-ratio:1;perspective:600px;cursor:pointer;}
+.flip-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .38s ease;}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+.flip-front,.flip-back{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 4px 0 rgba(0,0,0,.1);
+}
+.flip-front{background:linear-gradient(135deg,var(--ora1),var(--ora2));border:3px solid rgba(255,255,255,.3);}
+.flip-front-icon{font-size:1.5rem;}
+.flip-back{background:var(--card);border:3px solid rgba(255,200,80,.3);transform:rotateY(180deg);}
+.flip-back.matched{background:linear-gradient(135deg,#E8FAF0,#C8F5E0);border-color:var(--grn1);}
+.flip-back.wrong{background:#FFF0F0;border-color:var(--red1);}
+.flip-back-emoji{font-size:1.7rem;margin-bottom:3px;}
+.flip-back-word{font-size:.68rem;font-weight:900;color:var(--ink);text-align:center;padding:2px 4px;}
+
+/* ── Fill / Listen choices ── */
+.choice-q-txt{font-weight:900;font-size:1rem;color:var(--ink);line-height:1.45;}
+.choice-blank{display:inline-block;border-bottom:3px solid var(--ora2);min-width:54px;text-align:center;color:var(--ora2);font-weight:900;}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.choice-btn{
+  background:var(--card);border:3px solid rgba(255,200,80,.25);border-radius:var(--r);
+  padding:14px 8px;cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.09);width:100%;transition:transform .1s;
+}
+.choice-btn:active{transform:scale(.96);}
+.choice-btn.correct{background:linear-gradient(135deg,#E8FAF0,#D4F5E5);border-color:var(--grn1);}
+.choice-btn.wrong{background:#FFF0F0;border-color:var(--red1);}
+.choice-btn-word{font-weight:900;font-size:.98rem;color:var(--ink);}
+
+/* ── OX ── */
+.ox-wrap{display:flex;flex-direction:column;gap:12px;}
+.ox-sentence{font-weight:900;font-size:1.1rem;color:var(--ink);line-height:1.5;}
+.ox-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ox-btn{
+  padding:20px 10px;border-radius:var(--rXL);border:none;cursor:pointer;
+  font-size:2.4rem;font-weight:900;display:flex;flex-direction:column;align-items:center;gap:5px;
+  transition:transform .12s;box-shadow:0 6px 0 rgba(0,0,0,.13);
+}
+.ox-btn:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.13);}
+.ox-btn-o{background:linear-gradient(135deg,var(--grn1),var(--grn2));}
+.ox-btn-x{background:linear-gradient(135deg,var(--red1),var(--red2));}
+.ox-lbl{font-weight:900;font-size:.85rem;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.2);}
+
+/* ── Listen ── */
+.listen-speaker-btn{
+  width:76px;height:76px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--ora1),var(--ora2));
+  font-size:2.1rem;cursor:pointer;
+  box-shadow:0 6px 0 rgba(180,80,0,.3);transition:transform .12s;
+}
+.listen-speaker-btn:active{transform:scale(.92);}
+.listen-speaker-btn.playing{animation:pulse .5s ease infinite alternate;}
+@keyframes pulse{to{transform:scale(1.08);}}
+.listen-hint{font-weight:800;font-size:.85rem;color:var(--muted);margin-top:10px;}
+.listen-choices{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px;}
+.listen-choice{
+  background:var(--card);border-radius:var(--rXL);
+  border:3px solid rgba(255,200,80,.2);
+  padding:14px 8px;text-align:center;cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.08);transition:transform .1s;
+}
+.listen-choice:active{transform:scale(.95);}
+.listen-choice.correct{background:linear-gradient(135deg,#E8FAF0,#D4F5E5);border-color:var(--grn1);}
+.listen-choice.wrong{background:#FFF0F0;border-color:var(--red1);}
+.listen-choice-emoji{font-size:2rem;display:block;margin-bottom:5px;}
+.listen-choice-word{font-weight:900;font-size:.75rem;color:var(--muted);}
+
+/* ── Build ── */
+.build-wrap{display:flex;flex-direction:column;gap:11px;}
+.build-target{
+  background:var(--card);border-radius:var(--rXL);padding:15px;min-height:72px;
+  border:3px dashed rgba(255,200,80,.4);box-shadow:var(--shM);
+}
+.build-slots{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:40px;}
+.build-slot-word{
+  background:linear-gradient(135deg,var(--ora1),var(--ora2));color:#fff;
+  border-radius:999px;padding:6px 13px;cursor:pointer;
+  font-weight:900;font-size:.88rem;box-shadow:0 3px 0 rgba(180,80,0,.28);
+}
+.build-tiles{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;padding:4px;}
+.build-tile{
+  background:var(--card);border-radius:999px;
+  border:3px solid rgba(255,200,80,.28);
+  padding:7px 15px;cursor:pointer;
+  font-weight:900;font-size:.88rem;color:var(--ink);
+  box-shadow:0 3px 0 rgba(0,0,0,.08);transition:transform .1s;
+}
+.build-tile:active{transform:scale(.95);}
+.build-tile.used{opacity:.3;cursor:default;}
+.build-check-btn{
+  padding:14px;border-radius:var(--rXL);border:none;
+  background:linear-gradient(135deg,var(--grn1),var(--grn2));
+  color:#fff;font-weight:900;font-size:.95rem;cursor:pointer;
+  box-shadow:0 5px 0 rgba(0,150,100,.3);transition:transform .12s;width:100%;
+}
+.build-check-btn:active{transform:translateY(2px);}
+
+/* ── Speech / Chant / MissionCard (recording section) ── */
+.speech-wrap,.chant-card+div,.mission-card-wrap{display:flex;flex-direction:column;gap:12px;}
+.speech-card{text-align:center;}
+.speech-img{font-size:3.5rem;margin-bottom:10px;display:block;}
+.eng{font-weight:900;font-size:1.28rem;color:var(--ora1);letter-spacing:.03em;line-height:1.3;}
+.kor{font-size:.85rem;font-weight:700;color:var(--muted);margin-top:4px;}
+.native-btn{
+  margin-top:12px;
+  background:linear-gradient(135deg,#4FC3F7,#0288D1);
+  border:none;border-radius:999px;padding:9px 20px;
+  font-weight:900;font-size:.85rem;color:#fff;cursor:pointer;
+  box-shadow:0 4px 0 rgba(2,100,180,.3);transition:transform .12s;
+}
+.native-btn:active{transform:scale(.96);}
+.native-btn.playing{animation:pulse .5s ease infinite alternate;}
+.rec-area{display:flex;flex-direction:column;align-items:center;gap:9px;padding:6px 0;}
+.rec-btn{
+  width:70px;height:70px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--red1),var(--red2));
+  font-size:1.75rem;cursor:pointer;
+  box-shadow:0 5px 0 rgba(180,30,30,.3);transition:transform .12s;
+}
+.rec-btn:active{transform:scale(.92);}
+.rec-btn.recording{animation:recPulse 1s ease infinite;}
+@keyframes recPulse{0%,100%{box-shadow:0 5px 0 rgba(180,30,30,.3),0 0 0 0 rgba(220,50,50,.4);}50%{box-shadow:0 5px 0 rgba(180,30,30,.3),0 0 0 12px rgba(220,50,50,0);}}
+.rec-lbl{font-weight:800;font-size:.8rem;color:var(--muted);text-align:center;}
+.rec-playback{display:flex;align-items:center;gap:8px;width:100%;}
+.rec-playback-row{display:flex;align-items:center;gap:8px;width:100%;}
+.submit-btn{
+  width:100%;padding:14px;border-radius:var(--rXL);border:none;
+  background:linear-gradient(135deg,var(--grn1),var(--grn2));
+  color:#fff;font-weight:900;font-size:.95rem;cursor:pointer;
+  box-shadow:0 5px 0 rgba(0,150,100,.3);transition:transform .12s;
+}
+.submit-btn:active{transform:translateY(2px);}
+.chant-card{text-align:center;}
+.chant-img{font-size:2.8rem;margin-bottom:10px;display:block;}
+.chant-lines{display:flex;flex-direction:column;gap:7px;text-align:left;}
+.chant-line{
+  font-weight:800;font-size:.92rem;color:var(--ink);
+  padding:7px 12px;border-radius:var(--r);background:var(--warm);
+}
+.chant-line.hl{background:linear-gradient(135deg,#FFF0CC,var(--warm2));color:var(--ora1);}
+.chant-listen-btns{display:flex;gap:9px;margin-bottom:10px;}
+.chant-listen-btn{
+  flex:1;padding:11px;border-radius:var(--rXL);border:none;
+  background:linear-gradient(135deg,var(--ora2),var(--gld1));
+  color:#fff;font-weight:900;font-size:.85rem;cursor:pointer;
+  box-shadow:0 4px 0 rgba(200,140,0,.3);transition:transform .12s;
+}
+.chant-listen-btn:active{transform:scale(.96);}
+.chant-listen-btn.playing{animation:pulse .5s ease infinite alternate;}
+.mission-card-wrap{}
+.mission-card-visual{}
+.mc-trophy{font-size:2.8rem;text-align:center;margin-bottom:7px;display:block;}
+.mc-title{font-weight:900;font-size:1.05rem;color:var(--ink);text-align:center;margin-bottom:12px;}
+.mc-step{
+  display:flex;align-items:flex-start;gap:11px;
+  background:var(--warm);border-radius:var(--r);padding:11px 13px;margin-bottom:7px;
+}
+.mc-num{
+  width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(135deg,var(--ora1),var(--ora2));
+  color:#fff;font-weight:900;font-size:.78rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 2px 0 rgba(180,80,0,.28);
+}
+.mc-text{font-weight:800;font-size:.85rem;color:var(--ink);line-height:1.5;}
+
+/* ── Video ── */
+.video-intro{text-align:center;}
+.video-intro-img{font-size:2.8rem;margin-bottom:7px;display:block;}
+.video-intro-txt{font-weight:900;font-size:.95rem;color:var(--ink);}
+.video-loading{text-align:center;padding:36px 20px;}
+.video-loading-emoji{font-size:2.8rem;}
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.video-thumb{
+  background:var(--card);border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shM);cursor:pointer;border:3px solid transparent;transition:transform .12s;
+}
+.video-thumb:active{transform:scale(.96);}
+.video-thumb.watched{border-color:var(--grn1);}
+.video-thumb img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;}
+.video-thumb-info{padding:8px;}
+.video-thumb-title{font-weight:900;font-size:.72rem;color:var(--ink);line-height:1.3;}
+
+/* ══ OVERLAYS ══ */
+.fb-overlay{
+  position:fixed;inset:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;transition:opacity .18s;
+}
+.fb-overlay.show{opacity:1;}
+.fb-bubble{
+  background:var(--card);border-radius:var(--rXL);
+  padding:22px 38px;text-align:center;
+  box-shadow:var(--shM);border:3px solid rgba(255,200,80,.3);
+  transform:scale(.8);transition:transform .18s;
+}
+.fb-overlay.show .fb-bubble{transform:scale(1);}
+.fb-emoji{font-size:2.8rem;}
+.fb-text{font-weight:900;font-size:.95rem;color:var(--ink);margin-top:7px;}
+
+.lvup-overlay{
+  position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.lvup-overlay.show{opacity:1;pointer-events:auto;}
+.lvup-card{
+  background:var(--card);border-radius:var(--rXL);
+  padding:38px 28px;text-align:center;
+  box-shadow:var(--shM);max-width:300px;border:3px solid var(--gld2);
+}
+.lvup-trophy{font-size:3.8rem;margin-bottom:10px;display:block;}
+.lvup-title{font-size:1.55rem;font-weight:900;color:var(--ora1);}
+.lvup-sub{font-size:.88rem;font-weight:700;color:var(--muted);margin-top:5px;}
+.lvup-close{
+  margin-top:18px;padding:11px 30px;border-radius:999px;
+  background:linear-gradient(135deg,var(--ora1),var(--ora2));
+  color:#fff;border:none;font-weight:900;font-size:.92rem;cursor:pointer;
+  box-shadow:0 4px 0 rgba(180,80,0,.3);
+}
+
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);
+  background:#3A2410;color:#fff;border-radius:999px;
+  padding:9px 22px;font-weight:900;font-size:.85rem;
+  z-index:300;transition:transform .3s ease;white-space:nowrap;box-shadow:var(--shM);
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+.star-rain{position:fixed;inset:0;z-index:150;pointer-events:none;}
+.star-particle{
+  position:absolute;font-size:1.7rem;
+  animation:starFall .9s ease-out forwards;
+}
+@keyframes starFall{
+  0%{opacity:1;transform:translateY(-20px) rotate(0deg) scale(0);}
+  50%{opacity:1;transform:translateY(36px) rotate(180deg) scale(1.2);}
+  100%{opacity:0;transform:translateY(90px) rotate(360deg) scale(.4);}
+}
+button{font-family:'Baloo 2','Nunito',sans-serif;}
+</style>
+</head>
+<body>
+
+<div class="sky-bg" id="skyBg"></div>
+
+<!-- ═══════════════ HOME SCREEN ═══════════════ -->
+<div class="screen active" id="homeScreen">
+<div class="screen-inner">
+
+  <!-- Banner -->
+  <div class="home-banner">
+    <div class="home-plane">✈️</div>
+    <div class="home-title">🇺🇸 <em>USA</em> Travel<br>English Adventure!</div>
+    <div class="home-sub">Tap a city to start your mission!</div>
+  </div>
+
+  <!-- Player card -->
+  <div class="player-card">
+    <div class="player-avatar">🧒</div>
+    <div style="flex:1;min-width:0;">
+      <div class="player-name" id="playerName">English Explorer</div>
+      <div class="xp-row">
+        <div class="xp-track"><div class="xp-fill" id="heroXpFill" style="width:0%"></div></div>
+        <span class="xp-txt" id="heroXpTxt">0 XP</span>
+      </div>
+    </div>
+    <div class="lv-badge" id="playerLv">Lv.1</div>
+  </div>
+
+  <!-- Map -->
+  <div class="map-sec">
+    <div class="map-sec-label">🗺️ USA Explorer Map</div>
+    <div class="map-box">
+      <svg id="usaMapSvg" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" style="border-radius:16px;" pointer-events="all">
+          <!-- Ocean -->
+          <rect width="480" height="300" fill="#B8E4F9" rx="12" style="pointer-events:none"/>
+          <!-- continental US body -->
+          <path transform="scale(0.5)" stroke-width="5" d="M155,82 L830,82 L875,112 L892,158 L882,210 L862,242 L874,282 L852,322 L822,362 L792,402 L752,432 L702,452 L662,462 L622,472 L582,482 L562,500 L542,518 L512,528 L482,518 L452,508 L422,488 L382,468 L322,458 L262,453 L222,448 L182,438 L152,418 L122,388 L102,348 L92,298 L97,248 L112,198 L132,148 L155,82 Z" fill="#D4ECC8" stroke="#90B87C" stroke-width="2.5" style="pointer-events:none"/>
+          <!-- State grid lines -->
+          <line x1="147" y1="41" x2="142" y2="229" stroke="#B8D4A8" stroke-width="1.2" opacity="0.6" style="pointer-events:none"/>
+          <line x1="220" y1="41" x2="216" y2="244" stroke="#B8D4A8" stroke-width="1.2" opacity="0.6" style="pointer-events:none"/>
+          <line x1="295" y1="41" x2="291" y2="241" stroke="#B8D4A8" stroke-width="1.2" opacity="0.6" style="pointer-events:none"/>
+          <line x1="370" y1="41" x2="366" y2="216" stroke="#B8D4A8" stroke-width="1.2" opacity="0.6" style="pointer-events:none"/>
+          <line x1="77" y1="102" x2="416" y2="102" stroke="#B8D4A8" stroke-width="1.2" opacity="0.6" style="pointer-events:none"/>
+          <line x1="74" y1="162" x2="411" y2="162" stroke="#B8D4A8" stroke-width="1.2" opacity="0.6" style="pointer-events:none"/>
+          <!-- Alaska box -->
+          <rect x="72" y="468" width="135" height="112" rx="12" fill="#D4ECC8" stroke="#90B87C" stroke-width="2" style="pointer-events:none"/>
+          <text x="139" y="483" text-anchor="middle" font-size="9" fill="#78909C" font-family="Nunito,sans-serif" font-weight="800" style="pointer-events:none">ALASKA</text>
+          <!-- Hawaii -->
+          <ellipse cx="218" cy="528" rx="18" ry="10" fill="#D4ECC8" stroke="#90B87C" stroke-width="1.8" style="pointer-events:none"/>
+          <ellipse cx="246" cy="538" rx="12" ry="7" fill="#D4ECC8" stroke="#90B87C" stroke-width="1.8" style="pointer-events:none"/>
+          <ellipse cx="268" cy="534" rx="9" ry="6" fill="#D4ECC8" stroke="#90B87C" stroke-width="1.8" style="pointer-events:none"/>
+          <text x="122" y="278" text-anchor="middle" font-size="9" fill="#78909C" font-family="Nunito,sans-serif" font-weight="800" style="pointer-events:none">HAWAII</text>
+          <!-- City pins -->
+          <g id="cityPinsGroup"></g>
+        </svg>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="leg"><span class="leg-dot" style="background:#2ED573;"></span>Done</div>
+    <div class="leg"><span class="leg-dot" style="background:#FF8C00;"></span>In Progress</div>
+    <div class="leg"><span class="leg-dot" style="background:#C8C0B4;"></span>Not Started</div>
+  </div>
+
+  <!-- Continue card -->
+  <button class="continue-card" id="continueCard">
+    <span class="cc-emoji" id="continueEmoji">🗽</span>
+    <div class="cc-info">
+      <div class="cc-city" id="continueCity">New York Adventure!</div>
+      <div class="cc-desc" id="continueDesc">Keep going &rarr;</div>
+    </div>
+    <span class="cc-arr">›</span>
+  </button>
+
+</div>
+</div><!-- /homeScreen -->
+
+<!-- ═══════════════ STAGE SCREEN ═══════════════ -->
+<div class="screen" id="stageScreen">
+<div class="stage-hud">
+  <button class="hud-back" onclick="goHome()">‹</button>
+  <div class="hud-city-nm" id="stageHudTitle">City</div>
+  <div class="hud-xp" id="hudXp">0 XP</div>
+</div>
+<div class="stage-hero" id="stageHero">
+  <div class="stage-hero-content">
+    <span class="stage-hero-emoji" id="stageEmoji"></span>
+    <div class="stage-hero-city" id="stageCityName"></div>
+    <div class="stage-hero-sub" id="stageTheme"></div>
+    <div class="prog-row">
+      <div class="prog-track"><div class="prog-fill" id="stageProgFill" style="width:0%"></div></div>
+      <span class="prog-txt" id="stageProgTxt">0/11</span>
+    </div>
+  </div>
+</div>
+<div id="missionList" style="padding-bottom:100px;"></div>
+</div><!-- /stageScreen -->
+
+<!-- ═══════════════ GAME SCREEN ═══════════════ -->
+<div class="screen" id="gameScreen">
+  <div id="gameTop" style="position:sticky;top:0;z-index:10;background:linear-gradient(135deg,#FF8C00,#FFA726);">
+    <div class="game-hud">
+      <button class="hud-back" onclick="exitGame()">‹</button>
+      <div class="game-hud-title" id="gameHudTitle">Mission</div>
+      <div class="game-prog-dots" id="gameProgDots"></div>
+      <div class="hud-xp" style="background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.38);border-radius:999px;padding:5px 13px;font-weight:900;font-size:.82rem;color:#fff;">⚡ <span id="gameHudXp">0</span></div>
+    </div>
+    <div id="gameProgressFill" style="height:5px;background:rgba(255,255,255,.85);width:0%;transition:width .4s ease;"></div>
+  </div>
+  <div class="game-body" id="gameBody"></div>
+</div><!-- /gameScreen -->
+
+<!-- Feedback overlay -->
+<div class="fb-overlay" id="fbOverlay">
+  <div class="fb-bubble">
+    <div class="fb-emoji" id="fbEmoji">⭐</div>
+    <div class="fb-text" id="fbText">Great job!</div>
+  </div>
+</div>
+
+<!-- Level-up overlay -->
+<div class="lvup-overlay" id="lvupOverlay">
+  <div class="lvup-card">
+    <span class="lvup-trophy">🏆</span>
+    <div class="lvup-title">Level Up!</div>
+    <div class="lvup-sub" id="lvupSub">Amazing!</div>
+    <button class="lvup-close" onclick="closeLvUp()">Awesome! ✨</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Stars -->
+<div class="star-rain" id="starRain"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATA  –  12 Cities × 9 Missions
+═══════════════════════════════════════════════════════ */
+const LESSONS = [
+ {city:"New York",emoji:"🗽",color:"linear-gradient(135deg,#1a237e,#283593)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",desc:"그림과 단어 짝 맞추기",xp:20,
+   pairs:[{w:"taxi",e:"🚕"},{w:"apple",e:"🍎"},{w:"bridge",e:"🌉"},{w:"pizza",e:"🍕"},{w:"statue",e:"🗽"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",desc:"알맞은 단어를 골라요",xp:20,
+   qs:[{sent:"I see a ___ taxi!",img:"🚕",ans:"yellow",opts:["yellow","red","blue"],ko:"노란 택시를 봐요!"},
+       {sent:"I love New ___!",img:"🗽",ans:"York",opts:["York","Jersey","City"],ko:"뉴욕이 좋아요!"},
+       {sent:"Let's eat a hot ___!",img:"🌭",ans:"dog",opts:["dog","cat","cake"],ko:"핫도그 먹어요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",desc:"맞으면 O, 틀리면 X",xp:15,
+   qs:[{q:"The taxi is yellow!",ko:"택시는 노란색이에요.",img:"🚕",ans:true},
+       {q:"The Statue of Liberty is red.",ko:"자유의 여신상은 빨간색이에요.",img:"🗽",ans:false},
+       {q:"New York is a big city!",ko:"뉴욕은 큰 도시예요.",img:"🏙️",ans:true},
+       {q:"New York pizza is small.",ko:"뉴욕 피자는 작아요.",img:"🍕",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",desc:"소리 듣고 그림 찾기",xp:20,
+   words:[{w:"taxi",e:"🚕",ds:["🚌","✈️","🚂"]},{w:"bridge",e:"🌉",ds:["🏠","🌲","⛺"]},
+          {w:"pizza",e:"🍕",ds:["🍔","🌮","🍜"]},{w:"apple",e:"🍎",ds:["🍊","🍇","🍌"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",desc:"단어를 순서대로 놓아요",xp:25,
+   qs:[{ans:["I","love","New","York!"],img:"🗽",extra:["hate","Tokyo"],full:"I love New York!"},
+       {ans:["The","taxi","is","yellow!"],img:"🚕",extra:["red","car"],full:"The taxi is yellow!"},
+       {ans:["Let's","eat","pizza!"],img:"🍕",extra:["sleep","corn"],full:"Let's eat pizza!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",desc:"뉴욕 영상을 봐요",xp:15,
+   points:["자유의 여신상을 찾아봐요 🗽","노란 택시를 세어봐요 🚕","높은 빌딩을 봐요 🏙️"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",desc:"크게 따라 말해요",xp:30,
+   sents:[{e:"🗽",en:"I love New York!",ko:"뉴욕이 좋아요!"},
+          {e:"🚕",en:"The taxi is yellow.",ko:"택시는 노란색이에요."},
+          {e:"🍕",en:"I like pizza!",ko:"피자가 좋아요!"},
+          {e:"🏙️",en:"New York is big!",ko:"뉴욕은 커요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",desc:"노래처럼 불러봐요",xp:25,
+   img:"🗽",
+   lines:["🗽 New York, New York!","Big apple in the sky! 🍎","Yellow taxi, zoom zoom zoom! 🚕","Empire State so high! 🏙️","New York, New York, yeah! 🎉"],
+   full:"New York, New York! Big apple in the sky! Yellow taxi, zoom zoom zoom! Empire State so high! New York, New York, yeah!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",desc:"미션을 완수해요!",xp:30,
+   img:"🗽",title:"뉴욕 탐험가 미션",
+   steps:[{e:"🚕",bold:"The taxi is yellow!",ko:"택시는 노란색이에요."},
+          {e:"🗽",bold:"I love New York!",ko:"뉴욕이 좋아요!"},
+          {e:"🍕",bold:"New York pizza is yummy!",ko:"뉴욕 피자는 맛있어요!"}],
+   rec:"I love New York! The taxi is yellow!"}
+ ]},
+ {city:"Texas",emoji:"🤠",color:"linear-gradient(135deg,#BF360C,#E64A19)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"cowboy",e:"🤠"},{w:"horse",e:"🐴"},{w:"cactus",e:"🌵"},{w:"boots",e:"👢"},{w:"star",e:"⭐"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"Cowboys ride ___!",img:"🐴",ans:"horses",opts:["horses","cars","bikes"],ko:"카우보이는 말을 타요!"},
+       {sent:"Cactus grows in the ___!",img:"🌵",ans:"desert",opts:["desert","ocean","forest"],ko:"선인장은 사막에 자라요!"},
+       {sent:"I wear cowboy ___!",img:"🤠",ans:"hat",opts:["hat","shoes","scarf"],ko:"카우보이 모자를 써요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"Cowboys wear big hats!",ko:"카우보이는 모자를 써요.",img:"🤠",ans:true},
+       {q:"Horses live in the ocean.",ko:"말은 바다에 살아요.",img:"🐴",ans:false},
+       {q:"Texas is a very big state!",ko:"텍사스는 큰 주예요.",img:"🗺️",ans:true},
+       {q:"Cactus needs lots of water.",ko:"선인장은 물이 많이 필요해요.",img:"🌵",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"cowboy",e:"🤠",ds:["👮","👨‍🍳","🧑‍🚀"]},{w:"horse",e:"🐴",ds:["🐄","🐑","🐖"]},
+          {w:"cactus",e:"🌵",ds:["🌲","🌸","🌻"]},{w:"boots",e:"👢",ds:["👟","👠","🥾"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["I","am","a","cowboy!"],img:"🤠",extra:["girl","robot"],full:"I am a cowboy!"},
+       {ans:["Ride","the","horse!"],img:"🐴",extra:["dog","sleep"],full:"Ride the horse!"},
+       {ans:["Cactus","is","prickly!"],img:"🌵",extra:["soft","fish"],full:"Cactus is prickly!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["카우보이 모자를 찾아요 🤠","말을 타는 장면을 봐요 🐴","선인장은 어디에 있나요? 🌵"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🤠",en:"Yeehaw! I am a cowboy!",ko:"예하! 나는 카우보이예요!"},
+          {e:"🐴",en:"Ride the horse!",ko:"말을 타요!"},
+          {e:"🌵",en:"Cactus is prickly!",ko:"선인장은 따가워요!"},
+          {e:"⭐",en:"Texas is the Lone Star State!",ko:"텍사스는 론스타 주예요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🤠",
+   lines:["🤠 Cowboy, cowboy, yeehaw!","Ride that horse so fast! 🐴","Cactus in the desert sand! 🌵","Texas is so vast! ⭐","Cowboy, cowboy, yeehaw! 🎉"],
+   full:"Cowboy, cowboy, yeehaw! Ride that horse so fast! Cactus in the desert sand! Texas is so vast! Cowboy, cowboy, yeehaw!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🤠",title:"카우보이 미션",
+   steps:[{e:"🤠",bold:"Yeehaw! I am a cowboy!",ko:"나는 카우보이예요!"},
+          {e:"🐴",bold:"Ride the horse!",ko:"말을 타요!"},
+          {e:"🌵",bold:"Cactus is in the desert!",ko:"선인장은 사막에 있어요!"}],
+   rec:"Yeehaw! I am a cowboy!"}
+ ]},
+ {city:"Boston",emoji:"🔬",color:"linear-gradient(135deg,#0D47A1,#1565C0)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"heart",e:"❤️"},{w:"brain",e:"🧠"},{w:"eye",e:"👁️"},{w:"nose",e:"👃"},{w:"hand",e:"✋"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"I see with my ___!",img:"👁️",ans:"eyes",opts:["eyes","ears","nose"],ko:"눈으로 봐요!"},
+       {sent:"My ___ goes bump bump!",img:"❤️",ans:"heart",opts:["heart","brain","tummy"],ko:"심장이 뛰어요!"},
+       {sent:"I smell with my ___!",img:"👃",ans:"nose",opts:["nose","mouth","hand"],ko:"코로 냄새를 맡아요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"We see with our eyes!",ko:"눈으로 볼 수 있어요.",img:"👁️",ans:true},
+       {q:"We hear with our nose.",ko:"코로 소리를 들어요.",img:"👃",ans:false},
+       {q:"Our heart pumps blood!",ko:"심장은 피를 뿜어요.",img:"❤️",ans:true},
+       {q:"The brain is in our foot.",ko:"뇌는 발에 있어요.",img:"🧠",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"heart",e:"❤️",ds:["🧠","👁️","👃"]},{w:"brain",e:"🧠",ds:["❤️","✋","🦵"]},
+          {w:"eye",e:"👁️",ds:["👂","👅","👃"]},{w:"hand",e:"✋",ds:["🦵","👂","🦷"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["I","have","two","eyes!"],img:"👁️",extra:["three","ears"],full:"I have two eyes!"},
+       {ans:["My","heart","loves","you!"],img:"❤️",extra:["hates","brain"],full:"My heart loves you!"},
+       {ans:["I","smell","with","my","nose!"],img:"👃",extra:["eyes","see"],full:"I smell with my nose!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["심장이 어떻게 뛰나요? ❤️","눈은 어떻게 볼까요? 👁️","뇌는 무슨 일을 할까요? 🧠"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"👁️",en:"I see with my eyes!",ko:"눈으로 봐요!"},
+          {e:"❤️",en:"My heart goes bump bump!",ko:"심장이 쿵쿵!"},
+          {e:"👃",en:"I smell with my nose!",ko:"코로 냄새 맡아요!"},
+          {e:"🧠",en:"My brain helps me think!",ko:"뇌가 생각해줘요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🔬",
+   lines:["👁️ Eyes, eyes, I can see!","Nose, nose, I can smell! 👃","Heart, heart, bump bump bump! ❤️","Legs, legs, run with me! 🦵","Body, body, I love me! 🎉"],
+   full:"Eyes, eyes, I can see! Nose, nose, I can smell! Heart, heart, bump bump bump! Legs, legs, run with me! Body, body, I love me!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🔬",title:"내 몸 탐험 미션",
+   steps:[{e:"👁️",bold:"I see with my eyes!",ko:"눈으로 봐요!"},
+          {e:"❤️",bold:"My heart goes bump bump!",ko:"심장이 뛰어요!"},
+          {e:"🧠",bold:"My brain helps me think!",ko:"뇌가 생각해줘요!"}],
+   rec:"I have eyes, nose, heart and brain!"}
+ ]},
+ {city:"Florida",emoji:"🎢",color:"linear-gradient(135deg,#1B5E20,#2E7D32)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"castle",e:"🏰"},{w:"mouse",e:"🐭"},{w:"ride",e:"🎢"},{w:"magic",e:"✨"},{w:"fun",e:"🎉"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"Mickey ___ is my friend!",img:"🐭",ans:"Mouse",opts:["Mouse","Cat","Dog"],ko:"미키마우스는 내 친구!"},
+       {sent:"The ___ is so magical!",img:"🏰",ans:"castle",opts:["castle","house","school"],ko:"성이 정말 마법 같아요!"},
+       {sent:"This ride is so ___!",img:"🎢",ans:"fun",opts:["fun","boring","scary"],ko:"이 놀이기구 너무 재밌어요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"Disney World is in Florida!",ko:"디즈니월드는 플로리다에 있어요.",img:"🎢",ans:true},
+       {q:"Mickey Mouse is a cat.",ko:"미키마우스는 고양이예요.",img:"🐭",ans:false},
+       {q:"A princess lives in the castle!",ko:"성에는 공주가 살아요.",img:"🏰",ans:true},
+       {q:"Florida is a very cold place.",ko:"플로리다는 추운 곳이에요.",img:"☀️",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"castle",e:"🏰",ds:["🏠","🏢","🛖"]},{w:"mouse",e:"🐭",ds:["🐱","🐶","🐰"]},
+          {w:"magic",e:"✨",ds:["⭐","💫","🌟"]},{w:"ride",e:"🎢",ds:["🚗","🛝","🎠"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["I","love","Mickey","Mouse!"],img:"🐭",extra:["hate","Minnie"],full:"I love Mickey Mouse!"},
+       {ans:["The","castle","is","big!"],img:"🏰",extra:["small","school"],full:"The castle is big!"},
+       {ans:["This","ride","is","fun!"],img:"🎢",extra:["boring","stop"],full:"This ride is fun!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["신데렐라 성을 찾아봐요 🏰","미키마우스를 봐요 🐭","어떤 놀이기구가 있나요? 🎢"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🐭",en:"I love Mickey Mouse!",ko:"미키마우스를 사랑해요!"},
+          {e:"🏰",en:"The castle is magical!",ko:"성이 마법 같아요!"},
+          {e:"🎢",en:"This ride is so fun!",ko:"이 놀이기구 너무 재밌어요!"},
+          {e:"🎉",en:"Disney World is amazing!",ko:"디즈니월드는 놀라워요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🎢",
+   lines:["🏰 Castle, castle, big and tall!","Mickey Mouse, say hi to all! 🐭","Magic ride, wheee wheee wheee! 🎢","Disney World, I love it, see! ✨","Fun, fun, fun every day! 🎉"],
+   full:"Castle, castle, big and tall! Mickey Mouse, say hi to all! Magic ride, wheee wheee wheee! Disney World, I love it, see! Fun, fun, fun every day!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🎢",title:"디즈니 탐험가 미션",
+   steps:[{e:"🏰",bold:"The castle is magical!",ko:"성이 마법 같아요!"},
+          {e:"🐭",bold:"Hi Mickey Mouse!",ko:"안녕 미키마우스!"},
+          {e:"🎢",bold:"This ride is so fun!",ko:"놀이기구가 재밌어요!"}],
+   rec:"I love Disney World in Florida!"}
+ ]},
+ {city:"San Francisco",emoji:"🌉",color:"linear-gradient(135deg,#0D47A1,#1976D2)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"bridge",e:"🌉"},{w:"sea lion",e:"🦭"},{w:"fish",e:"🐟"},{w:"fog",e:"🌫️"},{w:"boat",e:"⛵"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"The Golden Gate ___ is orange!",img:"🌉",ans:"Bridge",opts:["Bridge","Tower","Wall"],ko:"금문교는 주황색이에요!"},
+       {sent:"I see a ___ lion!",img:"🦭",ans:"sea",opts:["sea","cat","dog"],ko:"바다사자를 봐요!"},
+       {sent:"Swim in the ___!",img:"🌊",ans:"bay",opts:["bay","pool","tub"],ko:"만에서 수영해요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"The Golden Gate Bridge is red.",ko:"금문교는 빨간색이에요.",img:"🌉",ans:false},
+       {q:"Sea lions live near the ocean!",ko:"바다사자는 바다 근처에 살아요.",img:"🦭",ans:true},
+       {q:"San Francisco has many hills!",ko:"샌프란시스코에는 언덕이 많아요.",img:"⛰️",ans:true},
+       {q:"Fish live in the desert.",ko:"물고기는 사막에 살아요.",img:"🐟",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"bridge",e:"🌉",ds:["🏠","🏰","🛕"]},{w:"sea lion",e:"🦭",ds:["🐋","🦈","🐬"]},
+          {w:"fish",e:"🐟",ds:["🦀","🦑","🦞"]},{w:"boat",e:"⛵",ds:["🚗","✈️","🚂"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["The","bridge","is","orange!"],img:"🌉",extra:["blue","small"],full:"The bridge is orange!"},
+       {ans:["I","see","a","sea","lion!"],img:"🦭",extra:["hear","fish"],full:"I see a sea lion!"},
+       {ans:["Fish","swim","in","the","sea!"],img:"🐟",extra:["fly","sky"],full:"Fish swim in the sea!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["금문교를 찾아봐요 🌉","바다사자를 봐요 🦭","어떤 배가 지나가나요? ⛵"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🌉",en:"The bridge is orange!",ko:"다리는 주황색이에요!"},
+          {e:"🦭",en:"I see a sea lion!",ko:"바다사자를 봐요!"},
+          {e:"🐟",en:"Fish swim in the sea!",ko:"물고기가 바다에서 헤엄쳐요!"},
+          {e:"⛵",en:"San Francisco is beautiful!",ko:"샌프란시스코는 아름다워요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🌉",
+   lines:["🌉 Bridge, bridge, orange and tall!","Sea lion, arf arf, hi to all! 🦭","Fish swim, fish swim, splish splash! 🐟","San Francisco, I love you! ⛵","Bay, bay, beautiful bay! 🌊"],
+   full:"Bridge, bridge, orange and tall! Sea lion, arf arf, hi to all! Fish swim, fish swim, splish splash! San Francisco, I love you! Bay, bay, beautiful bay!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🌉",title:"바다 탐험가 미션",
+   steps:[{e:"🌉",bold:"The Golden Gate Bridge is orange!",ko:"금문교는 주황색이에요!"},
+          {e:"🦭",bold:"Arf arf! I'm a sea lion!",ko:"나는 바다사자예요!"},
+          {e:"🐟",bold:"Fish swim in the sea!",ko:"물고기가 바다에서 헤엄쳐요!"}],
+   rec:"I love San Francisco! The bridge is orange!"}
+ ]},
+ {city:"Iowa",emoji:"🌽",color:"linear-gradient(135deg,#1B5E20,#388E3C)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"corn",e:"🌽"},{w:"cow",e:"🐄"},{w:"pig",e:"🐷"},{w:"tractor",e:"🚜"},{w:"chicken",e:"🐔"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"The cow says ___!",img:"🐄",ans:"moo",opts:["moo","oink","woof"],ko:"소가 음메 해요!"},
+       {sent:"Corn is ___ and yummy!",img:"🌽",ans:"yellow",opts:["yellow","blue","purple"],ko:"옥수수는 노랗고 맛있어요!"},
+       {sent:"The ___ plows the field!",img:"🚜",ans:"tractor",opts:["tractor","car","bike"],ko:"트랙터가 밭을 갈아요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"Corn grows on the farm!",ko:"옥수수는 농장에서 자라요.",img:"🌽",ans:true},
+       {q:"Cows say oink oink.",ko:"소는 오잉크 소리를 내요.",img:"🐄",ans:false},
+       {q:"Iowa has many beautiful farms!",ko:"아이오와에는 농장이 많아요.",img:"🏡",ans:true},
+       {q:"Tractors work in the ocean.",ko:"트랙터는 바다에서 일해요.",img:"🚜",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"corn",e:"🌽",ds:["🍅","🥕","🥦"]},{w:"cow",e:"🐄",ds:["🐖","🐑","🐓"]},
+          {w:"pig",e:"🐷",ds:["🐄","🐑","🐓"]},{w:"tractor",e:"🚜",ds:["🚗","🚌","🏍️"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["The","cow","says","moo!"],img:"🐄",extra:["dog","oink"],full:"The cow says moo!"},
+       {ans:["I","like","yellow","corn!"],img:"🌽",extra:["hate","green"],full:"I like yellow corn!"},
+       {ans:["The","pig","goes","oink!"],img:"🐷",extra:["cow","moo"],full:"The pig goes oink!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["옥수수밭을 찾아봐요 🌽","어떤 동물들이 있나요? 🐄","트랙터가 무얼 하나요? 🚜"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🐄",en:"The cow says moo!",ko:"소가 음메 해요!"},
+          {e:"🌽",en:"I like yellow corn!",ko:"노란 옥수수가 좋아요!"},
+          {e:"🐷",en:"The pig goes oink oink!",ko:"돼지가 꿀꿀!"},
+          {e:"🏡",en:"I love the farm!",ko:"농장이 좋아요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🌽",
+   lines:["🌽 Corn, corn, tall and yellow!","Cow says moo, mellow mellow! 🐄","Pig goes oink, oink oink oink! 🐷","Tractor big, vroom vroom vroom! 🚜","Farm life, farm life, best of all! 🏡"],
+   full:"Corn, corn, tall and yellow! Cow says moo, mellow mellow! Pig goes oink, oink oink oink! Tractor big, vroom vroom vroom! Farm life, farm life, best of all!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🌽",title:"농장 친구 미션",
+   steps:[{e:"🐄",bold:"Moo moo! I'm a cow!",ko:"나는 소예요!"},
+          {e:"🐷",bold:"Oink oink! I'm a pig!",ko:"나는 돼지예요!"},
+          {e:"🌽",bold:"Corn is yellow and yummy!",ko:"옥수수는 노랗고 맛있어요!"}],
+   rec:"I love the farm in Iowa!"}
+ ]},
+ {city:"New Orleans",emoji:"🎷",color:"linear-gradient(135deg,#4A148C,#6A1B9A)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"trumpet",e:"🎺"},{w:"drum",e:"🥁"},{w:"jazz",e:"🎷"},{w:"dance",e:"💃"},{w:"parade",e:"🎊"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"I play the ___!",img:"🎺",ans:"trumpet",opts:["trumpet","drum","guitar"],ko:"트럼펫을 연주해요!"},
+       {sent:"Let's ___ to the music!",img:"💃",ans:"dance",opts:["dance","sleep","eat"],ko:"음악에 맞춰 춰요!"},
+       {sent:"___ music is from New Orleans!",img:"🎷",ans:"Jazz",opts:["Jazz","Pop","Rock"],ko:"재즈 음악은 뉴올리언스에서 왔어요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"Jazz music started in New Orleans!",ko:"재즈는 뉴올리언스에서 시작했어요.",img:"🎷",ans:true},
+       {q:"A trumpet is a vegetable.",ko:"트럼펫은 채소예요.",img:"🎺",ans:false},
+       {q:"People dance at Mardi Gras!",ko:"마르디그라에서 춤을 춰요.",img:"💃",ans:true},
+       {q:"New Orleans is in Alaska.",ko:"뉴올리언스는 알래스카에 있어요.",img:"🗺️",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"trumpet",e:"🎺",ds:["🎸","🎹","🥁"]},{w:"drum",e:"🥁",ds:["🎺","🎷","🪗"]},
+          {w:"dance",e:"💃",ds:["🏊","🚴","🧗"]},{w:"parade",e:"🎊",ds:["🎭","🎪","🎡"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["I","love","jazz","music!"],img:"🎷",extra:["hate","rock"],full:"I love jazz music!"},
+       {ans:["Let's","dance","and","sing!"],img:"💃",extra:["stop","cry"],full:"Let's dance and sing!"},
+       {ans:["Beat","the","big","drum!"],img:"🥁",extra:["small","trumpet"],full:"Beat the big drum!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["재즈 밴드를 찾아봐요 🎷","어떤 악기가 들리나요? 🎺","퍼레이드를 봐요 🎊"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🎷",en:"I love jazz music!",ko:"재즈 음악이 좋아요!"},
+          {e:"💃",en:"Let's dance together!",ko:"같이 춰요!"},
+          {e:"🥁",en:"Beat the drum!",ko:"드럼을 쳐요!"},
+          {e:"🎊",en:"New Orleans is so fun!",ko:"뉴올리언스는 재밌어요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🎷",
+   lines:["🎷 Jazz, jazz, play all day!","Trumpet goes toot toot hooray! 🎺","Drum goes boom boom boom! 🥁","Dance and sing in the room! 💃","New Orleans, jazz city! 🎉"],
+   full:"Jazz, jazz, play all day! Trumpet goes toot toot hooray! Drum goes boom boom boom! Dance and sing in the room! New Orleans, jazz city!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🎷",title:"재즈 파티 미션",
+   steps:[{e:"🎺",bold:"Toot toot! I play trumpet!",ko:"뚜뚜! 트럼펫을 연주해요!"},
+          {e:"🥁",bold:"Boom boom! Beat the drum!",ko:"붐붐! 드럼을 쳐요!"},
+          {e:"💃",bold:"Let's dance to the jazz!",ko:"재즈에 맞춰 춰요!"}],
+   rec:"I love jazz music in New Orleans!"}
+ ]},
+ {city:"Minnesota",emoji:"🌲",color:"linear-gradient(135deg,#263238,#37474F)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"moose",e:"🦌"},{w:"bear",e:"🐻"},{w:"lake",e:"🏞️"},{w:"tree",e:"🌲"},{w:"canoe",e:"🛶"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"The big ___ has antlers!",img:"🦌",ans:"moose",opts:["moose","horse","deer"],ko:"큰 무스는 뿔이 있어요!"},
+       {sent:"I swim in the ___!",img:"🏞️",ans:"lake",opts:["lake","ocean","pool"],ko:"호수에서 수영해요!"},
+       {sent:"The ___ lives in the forest!",img:"🐻",ans:"bear",opts:["bear","cow","pig"],ko:"곰은 숲에 살아요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"Minnesota has many lakes!",ko:"미네소타에는 호수가 많아요.",img:"🏞️",ans:true},
+       {q:"A moose is a very tiny animal.",ko:"무스는 작은 동물이에요.",img:"🦌",ans:false},
+       {q:"Bears live in the forest!",ko:"곰은 숲에 살아요.",img:"🐻",ans:true},
+       {q:"We go skiing in the summer.",ko:"여름에 스키를 타요.",img:"⛷️",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"moose",e:"🦌",ds:["🦊","🐺","🦝"]},{w:"bear",e:"🐻",ds:["🦁","🐯","🐼"]},
+          {w:"lake",e:"🏞️",ds:["🏔️","🌋","🏜️"]},{w:"tree",e:"🌲",ds:["🌴","🌵","🌿"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["The","bear","is","big!"],img:"🐻",extra:["small","cat"],full:"The bear is big!"},
+       {ans:["I","swim","in","the","lake!"],img:"🏞️",extra:["fly","sky"],full:"I swim in the lake!"},
+       {ans:["The","moose","is","tall!"],img:"🦌",extra:["short","fish"],full:"The moose is tall!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["호수가 얼마나 많을까요? 🏞️","무스는 어떻게 생겼나요? 🦌","숲속 동물들을 찾아봐요 🐻"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🦌",en:"The moose is very big!",ko:"무스는 정말 커요!"},
+          {e:"🐻",en:"The bear lives in the forest!",ko:"곰은 숲에 살아요!"},
+          {e:"🏞️",en:"I swim in the lake!",ko:"호수에서 수영해요!"},
+          {e:"🌲",en:"Minnesota has lots of lakes!",ko:"미네소타에는 호수가 많아요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🌲",
+   lines:["🦌 Moose, moose, big and tall!","Bear, bear, furry and all! 🐻","Lake, lake, swim and play! 🏞️","Trees so tall every day! 🌲","Minnesota, wild and free! 🎉"],
+   full:"Moose, moose, big and tall! Bear, bear, furry and all! Lake, lake, swim and play! Trees so tall every day! Minnesota, wild and free!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🌲",title:"자연 탐험가 미션",
+   steps:[{e:"🦌",bold:"The moose is big and tall!",ko:"무스는 크고 높아요!"},
+          {e:"🐻",bold:"The bear lives in the forest!",ko:"곰은 숲에 살아요!"},
+          {e:"🏞️",bold:"Minnesota has ten thousand lakes!",ko:"미네소타엔 호수가 만 개!"}],
+   rec:"I love the lakes and forests in Minnesota!"}
+ ]},
+ {city:"Vermont",emoji:"🍁",color:"linear-gradient(135deg,#BF360C,#D84315)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"maple",e:"🍁"},{w:"syrup",e:"🍯"},{w:"pancake",e:"🥞"},{w:"snow",e:"❄️"},{w:"leaf",e:"🍂"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"Maple ___ is sweet!",img:"🍯",ans:"syrup",opts:["syrup","salt","water"],ko:"메이플 시럽은 달아요!"},
+       {sent:"The ___ leaves are red!",img:"🍁",ans:"maple",opts:["maple","oak","pine"],ko:"단풍잎은 빨개요!"},
+       {sent:"I eat ___ with syrup!",img:"🥞",ans:"pancakes",opts:["pancakes","pizza","soup"],ko:"팬케이크에 시럽을 뿌려요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"Maple syrup is sweet!",ko:"메이플 시럽은 달콤해요.",img:"🍯",ans:true},
+       {q:"Vermont gets lots of snow!",ko:"버몬트에는 눈이 많이 와요.",img:"❄️",ans:true},
+       {q:"Maple leaves are blue.",ko:"단풍잎은 파란색이에요.",img:"🍁",ans:false},
+       {q:"Pancakes taste salty.",ko:"팬케이크는 짜요.",img:"🥞",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"maple",e:"🍁",ds:["🍀","🌿","🌱"]},{w:"syrup",e:"🍯",ds:["🧈","🫙","🧂"]},
+          {w:"snow",e:"❄️",ds:["🌧️","☀️","🌈"]},{w:"pancake",e:"🥞",ds:["🧇","🍞","🥐"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["Maple","syrup","is","sweet!"],img:"🍯",extra:["sour","corn"],full:"Maple syrup is sweet!"},
+       {ans:["I","love","red","maple","leaves!"],img:"🍁",extra:["hate","blue"],full:"I love red maple leaves!"},
+       {ans:["Pancakes","with","syrup","please!"],img:"🥞",extra:["pizza","wait"],full:"Pancakes with syrup please!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["빨간 단풍잎을 찾아봐요 🍁","메이플 시럽을 어떻게 만들까요? 🍯","버몬트의 눈 풍경을 봐요 ❄️"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🍯",en:"Maple syrup is sweet!",ko:"메이플 시럽은 달아요!"},
+          {e:"🍁",en:"I love red maple leaves!",ko:"빨간 단풍잎을 사랑해요!"},
+          {e:"🥞",en:"Pancakes with syrup, yummy!",ko:"팬케이크에 시럽, 맛있어요!"},
+          {e:"❄️",en:"Vermont is beautiful in fall!",ko:"버몬트는 가을에 아름다워요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🍁",
+   lines:["🍁 Maple, maple, red and gold!","Syrup sweet, so I'm told! 🍯","Pancake time, flip flip flip! 🥞","Snow falls down, drip drip drip! ❄️","Vermont fall, best of all! 🎉"],
+   full:"Maple, maple, red and gold! Syrup sweet, so I'm told! Pancake time, flip flip flip! Snow falls down, drip drip drip! Vermont fall, best of all!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🍁",title:"메이플 요리사 미션",
+   steps:[{e:"🍁",bold:"Maple leaves are red and orange!",ko:"단풍잎은 빨갛고 주황이에요!"},
+          {e:"🍯",bold:"Maple syrup is sweet!",ko:"메이플 시럽은 달아요!"},
+          {e:"🥞",bold:"Pancakes with maple syrup, please!",ko:"팬케이크에 시럽을 주세요!"}],
+   rec:"I love maple syrup from Vermont!"}
+ ]},
+ {city:"Alaska",emoji:"🌌",color:"linear-gradient(135deg,#0D1B2A,#1B2A3B)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"aurora",e:"🌌"},{w:"polar bear",e:"🐻‍❄️"},{w:"snow",e:"❄️"},{w:"whale",e:"🐋"},{w:"sled",e:"🛷"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"The ___ lights dance in the sky!",img:"🌌",ans:"aurora",opts:["aurora","rainbow","moon"],ko:"오로라가 하늘에서 춤을 춰요!"},
+       {sent:"The polar ___ is white!",img:"🐻‍❄️",ans:"bear",opts:["bear","fox","wolf"],ko:"북극곰은 하얘요!"},
+       {sent:"We ride a ___ in the snow!",img:"🛷",ans:"sled",opts:["sled","boat","bike"],ko:"눈 위에서 썰매를 타요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"Alaska is very cold!",ko:"알래스카는 아주 추워요.",img:"❄️",ans:true},
+       {q:"Polar bears are brown.",ko:"북극곰은 갈색이에요.",img:"🐻‍❄️",ans:false},
+       {q:"The aurora shines at night!",ko:"오로라는 밤에 볼 수 있어요.",img:"🌌",ans:true},
+       {q:"Alaska is the smallest state.",ko:"알래스카는 가장 작은 주예요.",img:"🗺️",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"polar bear",e:"🐻‍❄️",ds:["🐻","🐼","🦁"]},{w:"aurora",e:"🌌",ds:["🌈","⭐","🌙"]},
+          {w:"whale",e:"🐋",ds:["🐬","🦈","🐟"]},{w:"sled",e:"🛷",ds:["🚗","🛼","🚲"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["The","aurora","is","beautiful!"],img:"🌌",extra:["ugly","moon"],full:"The aurora is beautiful!"},
+       {ans:["The","polar","bear","is","white!"],img:"🐻‍❄️",extra:["black","fox"],full:"The polar bear is white!"},
+       {ans:["Alaska","is","very","cold!"],img:"❄️",extra:["hot","warm"],full:"Alaska is very cold!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["오로라가 무슨 색인가요? 🌌","북극곰이 어디에 있나요? 🐻‍❄️","고래를 찾아봐요 🐋"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🌌",en:"The aurora is so beautiful!",ko:"오로라가 정말 아름다워요!"},
+          {e:"🐻‍❄️",en:"The polar bear is white!",ko:"북극곰은 하얘요!"},
+          {e:"❄️",en:"Alaska is very cold!",ko:"알래스카는 아주 추워요!"},
+          {e:"🐋",en:"I see a whale!",ko:"고래를 봐요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🌌",
+   lines:["🌌 Aurora, aurora, lights so bright!","Polar bear, polar bear, so white! 🐻‍❄️","Snow falls down, cold cold cold! ❄️","Whale in the ocean, big and bold! 🐋","Alaska, Alaska, wild and free! 🎉"],
+   full:"Aurora, aurora, lights so bright! Polar bear, polar bear, so white! Snow falls down, cold cold cold! Whale in the ocean, big and bold! Alaska, Alaska, wild and free!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🌌",title:"오로라 탐험가 미션",
+   steps:[{e:"🌌",bold:"The aurora is so beautiful!",ko:"오로라가 아름다워요!"},
+          {e:"🐻‍❄️",bold:"The polar bear is white!",ko:"북극곰은 하얘요!"},
+          {e:"❄️",bold:"Alaska is very cold! Brrr!",ko:"알래스카는 매우 추워요!"}],
+   rec:"I love the aurora lights in Alaska!"}
+ ]},
+ {city:"Washington DC",emoji:"🏛️",color:"linear-gradient(135deg,#880E4F,#AD1457)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"White House",e:"🏛️"},{w:"flag",e:"🇺🇸"},{w:"eagle",e:"🦅"},{w:"president",e:"👨‍💼"},{w:"monument",e:"🗿"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"The ___ lives in the White House!",img:"🏛️",ans:"President",opts:["President","Teacher","Doctor"],ko:"대통령은 백악관에 살아요!"},
+       {sent:"The American ___ is red white blue!",img:"🇺🇸",ans:"flag",opts:["flag","shirt","bag"],ko:"미국 국기는 빨강 하양 파랑!"},
+       {sent:"The bald ___ is the US symbol!",img:"🦅",ans:"eagle",opts:["eagle","lion","tiger"],ko:"대머리 독수리는 미국의 상징이에요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"The President lives in the White House!",ko:"대통령은 백악관에 살아요.",img:"🏛️",ans:true},
+       {q:"The US flag is green and yellow.",ko:"미국 국기는 초록 노랑이에요.",img:"🇺🇸",ans:false},
+       {q:"Washington DC is the capital of the USA!",ko:"워싱턴 DC는 미국의 수도예요.",img:"🗺️",ans:true},
+       {q:"The eagle is a fish.",ko:"독수리는 물고기예요.",img:"🦅",ans:false}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"eagle",e:"🦅",ds:["🦆","🐦","🦉"]},{w:"flag",e:"🇺🇸",ds:["🏴","🏳️","🎌"]},
+          {w:"White House",e:"🏛️",ds:["🏠","🏰","🕌"]},{w:"president",e:"👨‍💼",ds:["👮","👨‍⚕️","👨‍🍳"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["I","love","America!"],img:"🇺🇸",extra:["hate","Japan"],full:"I love America!"},
+       {ans:["The","eagle","can","fly","high!"],img:"🦅",extra:["swim","low"],full:"The eagle can fly high!"},
+       {ans:["The","President","lives","here!"],img:"🏛️",extra:["plays","school"],full:"The President lives here!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["백악관을 찾아봐요 🏛️","미국 국기를 봐요 🇺🇸","링컨 기념관을 찾아요 🗿"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"🏛️",en:"The President lives in the White House!",ko:"대통령은 백악관에 살아요!"},
+          {e:"🇺🇸",en:"The flag is red white and blue!",ko:"국기는 빨강 하양 파랑이에요!"},
+          {e:"🦅",en:"The bald eagle is the US symbol!",ko:"독수리는 미국의 상징이에요!"},
+          {e:"🎉",en:"USA is a great country!",ko:"미국은 훌륭한 나라예요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"🏛️",
+   lines:["🏛️ White House, White House, big and white!","Eagle, eagle, flying right! 🦅","Flag, flag, red white blue! 🇺🇸","President waving just for you! 👨‍💼","USA, USA, hooray! 🎉"],
+   full:"White House, White House, big and white! Eagle, eagle, flying right! Flag, flag, red white blue! President waving just for you! USA, USA, hooray!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"🏛️",title:"대통령 미션",
+   steps:[{e:"🏛️",bold:"The President lives in the White House!",ko:"대통령은 백악관에 살아요!"},
+          {e:"🇺🇸",bold:"The flag is red, white, and blue!",ko:"국기는 빨강 하양 파랑!"},
+          {e:"🦅",bold:"The bald eagle is the US symbol!",ko:"독수리는 미국의 상징!"}],
+   rec:"The President lives in the White House in Washington DC!"}
+ ]},
+ {city:"Hollywood",emoji:"⭐",color:"linear-gradient(135deg,#1A1A2E,#BF360C)",missions:[
+  {id:"flip",name:"카드 뒤집기",icon:"🃏",xp:20,
+   pairs:[{w:"star",e:"⭐"},{w:"camera",e:"🎥"},{w:"movie",e:"🎬"},{w:"award",e:"🏆"},{w:"stage",e:"🎭"}]},
+  {id:"fill",name:"빈칸 채우기",icon:"✏️",xp:20,
+   qs:[{sent:"Lights, ___, action!",img:"🎥",ans:"camera",opts:["camera","action","star"],ko:"조명 카메라 액션!"},
+       {sent:"I want to be a movie ___!",img:"⭐",ans:"star",opts:["star","teacher","doctor"],ko:"나는 영화 스타가 되고 싶어요!"},
+       {sent:"Hollywood makes great ___!",img:"🎬",ans:"movies",opts:["movies","corn","snow"],ko:"할리우드는 훌륭한 영화를 만들어요!"}]},
+  {id:"ox",name:"O X 퀴즈",icon:"⭕",xp:15,
+   qs:[{q:"Hollywood makes amazing movies!",ko:"할리우드는 영화를 만들어요.",img:"🎬",ans:true},
+       {q:"Hollywood is in Alaska.",ko:"할리우드는 알래스카에 있어요.",img:"🗺️",ans:false},
+       {q:"Stars walk on the red carpet!",ko:"스타들은 레드카펫을 걸어요.",img:"⭐",ans:true},
+       {q:"Cameras take pictures!",ko:"카메라는 사진을 찍어요.",img:"🎥",ans:true}]},
+  {id:"listen",name:"들어봐요",icon:"👂",xp:20,
+   words:[{w:"camera",e:"🎥",ds:["📷","📱","🖥️"]},{w:"star",e:"⭐",ds:["🌙","☀️","💫"]},
+          {w:"movie",e:"🎬",ds:["📺","🎮","📻"]},{w:"award",e:"🏆",ds:["🥇","🎖️","🏅"]}]},
+  {id:"build",name:"문장 만들기",icon:"🧩",xp:25,
+   qs:[{ans:["I","am","a","movie","star!"],img:"⭐",extra:["teacher","singer"],full:"I am a movie star!"},
+       {ans:["Lights,","camera,","action!"],img:"🎥",extra:["stop","cut"],full:"Lights, camera, action!"},
+       {ans:["Hollywood","is","so","cool!"],img:"🎬",extra:["boring","cold"],full:"Hollywood is so cool!"}]},
+  {id:"video",name:"영상 보기",icon:"🎬",xp:15,points:["할리우드 사인을 찾아봐요 ⭐","레드카펫 행사를 봐요 🎬","오스카 트로피를 찾아요 🏆"]},
+  {id:"speech",name:"말해봐요",icon:"🎤",xp:30,
+   sents:[{e:"⭐",en:"I am a movie star!",ko:"나는 영화 스타예요!"},
+          {e:"🎥",en:"Lights, camera, action!",ko:"조명, 카메라, 액션!"},
+          {e:"🎬",en:"Hollywood is so cool!",ko:"할리우드는 정말 멋져요!"},
+          {e:"🏆",en:"I want to win an award!",ko:"나는 상을 받고 싶어요!"}]},
+  {id:"chant",name:"챈트 부르기",icon:"🎵",xp:25,img:"⭐",
+   lines:["⭐ Star, star, shine so bright!","Camera rolling left and right! 🎥","Lights go on, it's showtime! 🎬","Hollywood, you are so fine! 🌟","Action, cut, one more time! 🎉"],
+   full:"Star, star, shine so bright! Camera rolling left and right! Lights go on, it's showtime! Hollywood, you are so fine! Action, cut, one more time!"},
+  {id:"missioncard",name:"미션 카드",icon:"📋",xp:30,img:"⭐",title:"스타 탄생 미션",
+   steps:[{e:"🎥",bold:"Lights, camera, action!",ko:"조명, 카메라, 액션!"},
+          {e:"⭐",bold:"I am a movie star!",ko:"나는 영화 스타예요!"},
+          {e:"🏆",bold:"Thank you! I won an award!",ko:"감사해요! 상을 받았어요!"}],
+   rec:"Lights, camera, action! I am a Hollywood star!"}
+ ]}
+];
+
+/* ═══════════ CITY MAP COORDS (SVG 960×600) ═══════════ */
+const CITY_COORDS=[
+ {x:420,y:78},{x:260,y:172},{x:410,y:70},{x:380,y:160},
+ {x:74,y:99},{x:258,y:108},{x:299,y:181},{x:244,y:79},
+ {x:389,y:70},{x:69,y:255},{x:340,y:74},{x:76,y:148}
+];
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+const XP_LEVELS=[0,100,240,420,650,940,1300,1740,2280,2940,3720];
+let ST=loadState(), curCity=0, curMi=0, curRevType='r1';
+let session={};
+let recMR=null, recChunks=[], recStream=null;
+
+function loadState(){
+  try{const s=JSON.parse(localStorage.getItem('toddler_v2'));if(s)return s;}catch(e){}
+  const st={xp:0,lv:1,cities:{}};
+  LESSONS.forEach((_,i)=>st.cities[i]={cleared:[],retry:{},r1:false,r2:false});
+  return st;
+}
+function save(){localStorage.setItem('toddler_v2',JSON.stringify(ST));}
+function getLv(xp){for(let i=XP_LEVELS.length-1;i>=0;i--)if(xp>=XP_LEVELS[i])return i+1;return 1;}
+function xpPct(lv,xp){
+  const lo=XP_LEVELS[Math.max(0,lv-1)]||0,hi=XP_LEVELS[Math.min(lv,XP_LEVELS.length-1)]||9999;
+  return Math.max(0,Math.min(100,Math.round((xp-lo)/(hi-lo)*100)));
+}
+
+/* ═══════════ SPEECH ═══════════ */
+function speak(text,rate=0.78,pitch=1.0){
+  return new Promise(res=>{
+    if(!window.speechSynthesis){res();return;}
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.rate=rate;u.pitch=pitch;u.volume=1;u.lang='en-US';
+    const vv=speechSynthesis.getVoices();
+    const pref=vv.find(v=>/samantha/i.test(v.name))
+              ||vv.find(v=>/karen|moira|allison|ava/i.test(v.name))
+              ||vv.find(v=>v.lang==='en-US'&&v.localService)
+              ||vv.find(v=>v.lang==='en-US')
+              ||vv.find(v=>v.lang.startsWith('en'));
+    if(pref)u.voice=pref;
+    u.onend=res;u.onerror=res;
+    speechSynthesis.speak(u);
+  });
+}
+function speakNatural(text){ return speak(text, 0.72, 1.0); }
+function speakChant(text){ return speak(text, 0.80, 1.05); }
+
+if(window.speechSynthesis){
+  speechSynthesis.getVoices();
+  if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+}
+
+/* ═══════════ BEEP ═══════════ */
+function beep(t){
+  try{
+    const a=new(window.AudioContext||window.webkitAudioContext)();
+    const o=a.createOscillator(),g=a.createGain();
+    o.connect(g);g.connect(a.destination);
+    if(t==='ok'){o.type='sine';o.frequency.setValueAtTime(523,a.currentTime);o.frequency.setValueAtTime(784,a.currentTime+.1);g.gain.setValueAtTime(.25,a.currentTime);}
+    else if(t==='match'){[523,659,784].forEach((f,i)=>{const o2=a.createOscillator(),g2=a.createGain();o2.connect(g2);g2.connect(a.destination);o2.frequency.value=f;g2.gain.setValueAtTime(.22,a.currentTime+i*.12);g2.gain.exponentialRampToValueAtTime(.001,a.currentTime+i*.12+.3);o2.start(a.currentTime+i*.12);o2.stop(a.currentTime+i*.12+.3);});return;}
+    else if(t==='wrong'){o.type='sawtooth';o.frequency.setValueAtTime(280,a.currentTime);o.frequency.setValueAtTime(160,a.currentTime+.15);g.gain.setValueAtTime(.18,a.currentTime);}
+    else{o.frequency.value=660;g.gain.setValueAtTime(.18,a.currentTime);}
+    g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.45);
+    o.start();o.stop(a.currentTime+.45);
+  }catch(e){}
+}
+
+/* ═══════════ TOAST ═══════════ */
+function toast(msg,emoji='✨'){
+  const el=document.getElementById('toast');
+  el.textContent=(emoji?emoji+' ':'')+msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),1800);
+}
+
+/* ═══════════ FEEDBACK ═══════════ */
+let fbTimer=null;
+function showFb(ok,msg=''){
+  clearTimeout(fbTimer);
+  const ov=document.getElementById('fbOverlay');
+  document.getElementById('fbEmoji').textContent=ok?'⭐':'💪';
+  document.getElementById('fbText').textContent=ok?(msg||'잘했어요! 🎉'):(msg||'다시 해봐요!');
+  ov.classList.add('show');
+  fbTimer=setTimeout(()=>ov.classList.remove('show'),900);
+}
+
+/* ═══════════ STARS ═══════════ */
+function rainStars(){
+  const c=document.getElementById('starRain');
+  ['⭐','🌟','✨','💫','🎉'].forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='star-particle';
+    d.textContent=s;
+    d.style.left=Math.random()*100+'%';
+    d.style.animationDelay=i*.15+'s';
+    c.appendChild(d);
+    setTimeout(()=>d.remove(),1400);
+  });
+}
+
+/* ═══════════ SCREEN ═══════════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById(id).scrollTop=0;
+}
+
+/* ═══════════ HUD ═══════════ */
+function refreshHUD(){
+  const lv=ST.lv,xp=ST.xp,pct=xpPct(lv,xp);
+  document.getElementById('heroXpFill').style.width=pct+'%';
+  document.getElementById('heroXpTxt').textContent=xp+' XP';
+  document.getElementById('playerLv').textContent='Lv.'+lv;
+  document.getElementById('hudXp').textContent=xp+' XP';
+  document.getElementById('gameHudXp').textContent=xp;
+}
+
+/* ═══════════ HOME ═══════════ */
+function renderHome(){
+  buildMapPins();
+  // continue card
+  let bestIdx=0,bestP=0;
+  LESSONS.forEach((_,i)=>{
+    const c=ST.cities[i];
+    const p=c.cleared.length+(c.r1?1:0)+(c.r2?1:0);
+    if(p>bestP){bestP=p;bestIdx=i;}
+  });
+  const bl=LESSONS[bestIdx],bc=ST.cities[bestIdx];
+  const bp=bc.cleared.length+(bc.r1?1:0)+(bc.r2?1:0);
+  document.getElementById('continueEmoji').textContent=bl.emoji;
+  document.getElementById('continueCity').textContent=bl.city+' 이어하기';
+  document.getElementById('continueDesc').textContent=bp+'/11 완료 · '+bl.missions[Math.min(bp,8)].name;
+  document.getElementById('continueCard').onclick=()=>openCity(bestIdx);
+  refreshHUD();
+}
+
+function goContinue(){document.getElementById('continueCard').click();}
+function goHome(){showScreen('homeScreen');renderHome();}
+function exitGame(){openCity(curCity);}
+
+/* ═══════════ MAP PINS ═══════════ */
+let tipTimer=null;
+
+async function recTog(){
+  const btn=document.getElementById('recBtn');
+  const lbl=document.getElementById('recLbl');
+  if(recMR&&recMR.state==='recording'){
+    recMR.stop();
+    if(btn){btn.classList.remove('recording');btn.textContent='🎤';}
+    if(lbl)lbl.textContent='녹음 완료! 들어보고 제출해요 🎧';
+    return;
+  }
+  try{
+    if(navigator.permissions){
+      try{const p=await navigator.permissions.query({name:'microphone'});if(p.state==='denied'){toast('마이크 권한을 허용해주세요!','🎤');return;}}catch(e){}
+    }
+    recStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
+    recChunks=[];
+    recMR=new MediaRecorder(recStream,{mimeType:MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':'audio/webm'});
+    recMR.ondataavailable=e=>{if(e.data&&e.data.size>0)recChunks.push(e.data);};
+    recMR.onstop=()=>{
+      if(session.timerInterval)clearInterval(session.timerInterval);
+      recStream.getTracks().forEach(t=>t.stop());
+      const blob=new Blob(recChunks,{type:'audio/webm'});
+      const url=URL.createObjectURL(blob);
+      const ra=document.getElementById('recAudio');if(ra)ra.src=url;
+      const rp=document.getElementById('recPlay');if(rp)rp.style.display='flex';
+      const rs=document.getElementById('recSubmit');if(rs){rs.disabled=false;rs.style.opacity='1';}
+      beep('ok');
+      const sr=document.getElementById('speechResult');
+      if(sr){
+        sr.style.display='block';
+        const msg=document.getElementById('speechResultMsg');
+        if(msg){
+          msg.style.background='#F0FDF4';msg.style.color='#166534';
+          msg.textContent=(session.recAttempts||0)===0?'🎉 잘했어요! 내 목소리를 들어봐요!':'💪 다시 도전! 원어민처럼 말해봐요!';
+        }
+      }
+      const timerLbl=document.getElementById('timerLabel');
+      if(timerLbl&&!timerLbl.textContent.includes('완료'))timerLbl.textContent='녹음 완료! 🎧';
+    };
+    recMR.start(100);
+    if(btn){btn.classList.add('recording');btn.textContent='⏹';}
+    if(lbl)lbl.textContent='녹음 중... 다시 누르면 멈춰요!';
+  }catch(e){
+    console.error('Mic error:',e);
+    if(lbl)lbl.textContent='마이크를 허용해주세요!';
+    toast('마이크 권한이 필요해요!','🎤');
+    const rs=document.getElementById('recSubmit');
+    if(rs){rs.disabled=false;rs.style.opacity='0.7';}
+  }
+}
+
+function startSpeechRec(){
+  session.recMaxSec=30; session.recStartTime=Date.now();
+  const bar=document.getElementById('timerBar'), lbl=document.getElementById('timerLabel');
+  if(bar) bar.style.width='0%';
+  let elapsed=0;
+  if(session.timerInterval) clearInterval(session.timerInterval);
+  session.timerInterval=setInterval(()=>{
+    elapsed+=0.5;
+    const pct=Math.min((elapsed/30)*100,100);
+    if(bar) bar.style.width=pct+'%';
+    const rem=Math.max(0,30-Math.floor(elapsed));
+    if(lbl) lbl.textContent=rem>0?'⏱️ 남은 시간: '+rem+'초':'⏱️ 시간 완료!';
+    if(pct>=100){clearInterval(session.timerInterval);if(recMR&&recMR.state==='recording')recMR.stop();}
+  },500);
+  recTog();
+}
+
+function retrySpeech(){
+  session.recAttempts=(session.recAttempts||0)+1;
+  ['recPlay','speechResult'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  const bar=document.getElementById('timerBar');if(bar)bar.style.width='0%';
+  const lbl=document.getElementById('timerLabel');if(lbl)lbl.textContent='다시 해봐요! 💪';
+  setTimeout(()=>playNative(),200);
+}
+
+async function playChantRhythmic(){
+  const m=LESSONS[curCity].missions[curMi];
+  const btn=document.getElementById('chantPlayBtn');
+  if(btn){btn.textContent='🎵 재생 중...';btn.style.opacity='.7';}
+  for(let i=0;i<m.lines.length;i++){
+    m.lines.forEach((_,j)=>{
+      const el=document.getElementById('cline'+j);
+      if(el){el.style.transform=j===i?'scale(1.05)':'scale(1)';el.style.opacity=j===i?'1':'0.5';}
+    });
+    await speakChant(m.lines[i]);
+    await new Promise(r=>setTimeout(r,200));
+  }
+  m.lines.forEach((_,i)=>{const el=document.getElementById('cline'+i);if(el){el.style.transform='';el.style.opacity='1';}});
+  if(btn){btn.textContent='▶ 챈트 듣기';btn.style.opacity='1';}
+}
+
+async function mcListenAll(){
+  const m=LESSONS[curCity].missions[curMi];
+  const btn=document.getElementById('mcListenAllBtn');
+  if(btn){btn.textContent='🔊 읽는 중...';btn.style.opacity='.7';}
+  for(let i=0;i<m.steps.length;i++){
+    m.steps.forEach((_,j)=>{
+      const el=document.getElementById('mcstep'+j);
+      if(el){el.style.opacity=j===i?'1':'0.5';el.style.transform=j===i?'scale(1.02)':'scale(1)';}
+    });
+    await speakNatural(m.steps[i].bold);
+    await new Promise(r=>setTimeout(r,300));
+  }
+  m.steps.forEach((_,i)=>{const el=document.getElementById('mcstep'+i);if(el){el.style.opacity='1';el.style.transform='';}});
+  if(btn){btn.textContent='🔊 전체 문장 듣기';btn.style.opacity='1';}
+}
+
+function startMCRec(){
+  const m=LESSONS[curCity].missions[curMi];
+  if(m&&m.steps) m.steps.forEach((_,i)=>{const el=document.getElementById('mcstep'+i);if(el){el.style.opacity='1';el.style.border='2px solid var(--orange)';}});
+  startSpeechRec();
+}
+
+function retryMC(){
+  session.recAttempts=(session.recAttempts||0)+1;
+  ['recPlay','speechResult'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  const bar=document.getElementById('timerBar');if(bar)bar.style.width='0%';
+  const lbl=document.getElementById('timerLabel');if(lbl)lbl.textContent='다시 도전! 💪';
+  const m=LESSONS[curCity].missions[curMi];
+  if(m&&m.steps) m.steps.forEach((_,i)=>{const el=document.getElementById('mcstep'+i);if(el){el.style.opacity='1';el.style.border='';}});
+  setTimeout(()=>mcListenAll(),200);
+}
+
+function buildMapPins(){
+  const g=document.getElementById('cityPinsGroup');
+  if(!g)return;
+  g.innerHTML='';
+  const ns='http://www.w3.org/2000/svg';
+  const RED='#BF0A30', BLUE='#002868', GOLD='#FFD700', W='#FFFFFF';
+
+  // R=18: small circle, emoji font-size=20 (almost fills the circle)
+  const R=18;
+
+  LESSONS.forEach((l,i)=>{
+    const cv=ST.cities[i];
+    const prog=cv.cleared.length+(cv.r1?1:0)+(cv.r2?1:0);
+    const done=prog>=11, hasp=prog>0;
+    const coord=CITY_COORDS[i]; if(!coord)return;
+    const {x,y}=coord;
+    const circ=2*Math.PI*R;
+    const dash=circ*(prog/11), gap=circ-dash;
+    const outerCol=done?GOLD:hasp?RED:BLUE;
+    const innerBg=done?BLUE:hasp?'#FFF0F0':'#F0F4FF';
+    const lblBg=done?GOLD:hasp?RED:BLUE;
+    const lblTxt=done?BLUE:W;
+
+    const grp=document.createElementNS(ns,'g');
+    grp.setAttribute('class','city-pin');
+    grp.setAttribute('transform',`translate(${x},${y})`);
+    grp.style.cursor='pointer';
+
+    // Subtle glow for in-progress
+    if(hasp&&!done){
+      const gl=document.createElementNS(ns,'circle');
+      gl.setAttribute('cx','0');gl.setAttribute('cy','0');gl.setAttribute('r',String(R+7));
+      gl.setAttribute('fill',RED);gl.setAttribute('opacity','0.2');
+      gl.style.pointerEvents='none'; grp.appendChild(gl);
+    }
+
+    // White outer ring
+    const rim=document.createElementNS(ns,'circle');
+    rim.setAttribute('cx','0');rim.setAttribute('cy','0');rim.setAttribute('r',String(R+4));
+    rim.setAttribute('fill',W);rim.setAttribute('stroke',outerCol);rim.setAttribute('stroke-width','3');
+    rim.style.pointerEvents='none'; grp.appendChild(rim);
+
+    // Progress arc
+    const arc=document.createElementNS(ns,'circle');
+    arc.setAttribute('cx','0');arc.setAttribute('cy','0');arc.setAttribute('r',String(R+1));
+    arc.setAttribute('fill','none');
+    arc.setAttribute('stroke',done?GOLD:hasp?RED:'#CBD5E1');
+    arc.setAttribute('stroke-width','4');
+    arc.setAttribute('stroke-dasharray',`${dash*(R+1)/R} ${gap*(R+1)/R}`);
+    arc.setAttribute('stroke-linecap','round');
+    arc.setAttribute('transform','rotate(-90)');
+    arc.style.pointerEvents='none'; grp.appendChild(arc);
+
+    // Inner circle
+    const inn=document.createElementNS(ns,'circle');
+    inn.setAttribute('cx','0');inn.setAttribute('cy','0');inn.setAttribute('r',String(R));
+    inn.setAttribute('fill',innerBg);
+    inn.style.pointerEvents='none'; grp.appendChild(inn);
+
+    // ★ BIG EMOJI (font-size=20, almost fills R=18 circle)
+    const et=document.createElementNS(ns,'text');
+    et.setAttribute('x','0');et.setAttribute('y','1');
+    et.setAttribute('text-anchor','middle');
+    et.setAttribute('font-size','20');
+    et.setAttribute('dominant-baseline','middle');
+    et.style.pointerEvents='none';
+    et.textContent=done?'⭐':l.emoji;
+    grp.appendChild(et);
+
+    // Label pill (small, Fredoka)
+    const cityName=l.city.split(' ')[0];
+    const lblW=Math.max(40, cityName.length*6.5+16);
+    const lblH=15; const lblY=R+5;
+
+    const lb=document.createElementNS(ns,'rect');
+    lb.setAttribute('x',String(-lblW/2));lb.setAttribute('y',String(lblY));
+    lb.setAttribute('width',String(lblW));lb.setAttribute('height',String(lblH));
+    lb.setAttribute('rx',String(lblH/2));
+    lb.setAttribute('fill',lblBg);lb.setAttribute('stroke',W);lb.setAttribute('stroke-width','1.5');
+    lb.style.pointerEvents='none'; grp.appendChild(lb);
+
+    const lt=document.createElementNS(ns,'text');
+    lt.setAttribute('x','0');lt.setAttribute('y',String(lblY+lblH/2+0.5));
+    lt.setAttribute('text-anchor','middle');lt.setAttribute('dominant-baseline','middle');
+    lt.setAttribute('font-size','7.5');lt.setAttribute('fill',lblTxt);
+    lt.setAttribute('font-family','Baloo 2, Nunito, Arial Rounded MT Bold, cursive');
+    lt.setAttribute('font-weight','700');lt.setAttribute('letter-spacing','0.3');
+    lt.style.pointerEvents='none'; lt.textContent=cityName;
+    grp.appendChild(lt);
+
+    // Small badge (done=star, progress=count)
+    if(done){
+      const sb=document.createElementNS(ns,'circle');
+      sb.setAttribute('cx',String(R+2));sb.setAttribute('cy',String(-R-2));sb.setAttribute('r','7');
+      sb.setAttribute('fill',GOLD);sb.setAttribute('stroke',W);sb.setAttribute('stroke-width','1.5');
+      sb.style.pointerEvents='none'; grp.appendChild(sb);
+      const st2=document.createElementNS(ns,'text');
+      st2.setAttribute('x',String(R+2));st2.setAttribute('y',String(-R+1));
+      st2.setAttribute('text-anchor','middle');st2.setAttribute('font-size','8');
+      st2.setAttribute('dominant-baseline','middle');
+      st2.style.pointerEvents='none'; st2.textContent='⭐';
+      grp.appendChild(st2);
+    }
+    if(hasp&&!done){
+      const pb=document.createElementNS(ns,'circle');
+      pb.setAttribute('cx',String(R+2));pb.setAttribute('cy',String(-R-2));pb.setAttribute('r','7');
+      pb.setAttribute('fill',RED);pb.setAttribute('stroke',W);pb.setAttribute('stroke-width','1.5');
+      pb.style.pointerEvents='none'; grp.appendChild(pb);
+      const pt=document.createElementNS(ns,'text');
+      pt.setAttribute('x',String(R+2));pt.setAttribute('y',String(-R+1));
+      pt.setAttribute('text-anchor','middle');pt.setAttribute('font-size','6');
+      pt.setAttribute('fill',W);pt.setAttribute('dominant-baseline','middle');
+      pt.setAttribute('font-family','Baloo 2, cursive');pt.setAttribute('font-weight','700');
+      pt.style.pointerEvents='none'; pt.textContent=String(prog)+'/11';
+      grp.appendChild(pt);
+    }
+
+    // Hit area
+    const hitW=Math.max(lblW+16, 60);
+    const hit=document.createElementNS(ns,'rect');
+    hit.setAttribute('x',String(-hitW/2));hit.setAttribute('y',String(-(R+10)));
+    hit.setAttribute('width',String(hitW));hit.setAttribute('height',String(R+lblH+20));
+    hit.setAttribute('fill','rgba(255,255,255,0.01)');
+    hit.setAttribute('stroke','none');
+    grp.appendChild(hit);
+
+    grp.addEventListener('click',function(){openCity(i);});
+    grp.addEventListener('touchend',function(e){e.preventDefault();e.stopPropagation();openCity(i);});
+    grp.addEventListener('mouseenter',function(){pinHover(null,i);});
+    grp.addEventListener('mouseleave',function(){pinOut();});
+    g.appendChild(grp);
+  });
+}
+
+
+
+
+function pinHover(e,i){
+  clearTimeout(tipTimer);
+  const l=LESSONS[i],c=ST.cities[i];
+  const p=c.cleared.length+(c.r1?1:0)+(c.r2?1:0);
+  const tt=document.getElementById('cityTooltip');
+  document.getElementById('ttEmoji').textContent=l.emoji;
+  document.getElementById('ttName').textContent=l.city;
+  document.getElementById('ttProg').textContent=p+'/11 완료';
+  const svg=document.getElementById('usaMapSvg');
+  const sr=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
+  const sx=sr.width/vb.width,sy=sr.height/vb.height;
+  const coord=CITY_COORDS[i];
+  tt.style.left=(coord.x*sx)+'px';
+  tt.style.top=(coord.y*sy-120)+'px';
+  tt.style.display='block';
+}
+function pinOut(){
+  tipTimer=setTimeout(()=>document.getElementById('cityTooltip').style.display='none',400);
+}
+
+/* ═══════════ OPEN CITY ═══════════ */
+function openCity(idx){
+  curCity=idx;
+  const l=LESSONS[idx],c=ST.cities[idx];
+  document.getElementById('stageHudTitle').textContent=l.emoji+' '+l.city;
+  document.getElementById('hudXp').textContent=ST.xp+' XP';
+  document.getElementById('stageHero').style.background=l.color;
+  document.getElementById('stageEmoji').textContent=l.emoji;
+  document.getElementById('stageCityName').textContent=l.city;
+  document.getElementById('stageTheme').textContent='🗓️ 9개 미션 + 2번 리뷰';
+  const total=c.cleared.length+(c.r1?1:0)+(c.r2?1:0);
+  document.getElementById('stageProgFill').style.width=(total/11*100)+'%';
+  document.getElementById('stageProgTxt').textContent=total+'/11';
+  document.getElementById('stageTheme').textContent=LESSONS[idx].city+' · '+total+'/11 완료';
+
+  buildMissionList(idx,c,l);
+  showScreen('stageScreen');
+}
+
+function buildMissionList(idx,c,l){
+  const wrap=document.getElementById('missionList');
+  wrap.innerHTML='';
+
+  function wkLabel(txt,col){
+    const h=document.createElement('div');h.className='week-hd';
+    h.innerHTML=`<span class="week-pill" style="background:${col};">${txt}</span>`;
+    wrap.appendChild(h);
+  }
+
+  function mItem(mi,m,locked,cleared,isCurrent,isRev=false,revKey=''){
+    const hasRetry=!isRev&&ST.cities[idx].retry[mi]&&ST.cities[idx].retry[mi].length>0&&!cleared;
+    const item=document.createElement('div');
+    let cls='mission-item';
+    if(cleared)cls+=' cleared';
+    else if(locked)cls+=' locked';
+    else if(isCurrent)cls+=' current';
+    item.className=cls;
+
+    const iconBg=cleared?'linear-gradient(135deg,#2ED573,#7BED9F)':locked?'#EDE8E0':'linear-gradient(135deg,#FF8C00,#FFA726)';
+    const revBadgeHtml=isRev?`<span class="rev-badge">${revKey==='r1'?'🔁 Week 2 Review':'🏆 Final Review'}</span>`:'';
+    const badgeHtml=cleared?'<div style="color:#2ED573;font-size:1.3rem;">✅</div>':locked?'<div style="color:var(--pale);font-size:1.1rem;">🔒</div>':'<button class="play-btn">▶</button>';
+
+    item.innerHTML=`
+      <div class="mission-icon-wrap" style="background:${iconBg};box-shadow:0 3px 0 rgba(0,0,0,.13);">
+        ${cleared?'✅':m.icon}
+      </div>
+      <div class="mission-info">
+        <div class="mission-title">${isRev?'':('M'+(mi+1)+' · ')}${m.name} ${revBadgeHtml}</div>
+        <div class="mission-desc">${m.desc||''} · +${m.xp}⚡</div>
+        ${hasRetry?'<div style="font-size:.68rem;color:var(--red1);font-weight:900;margin-top:2px;">⚠️ Try again!</div>':''}
+      </div>
+      ${badgeHtml}`;
+
+    if(!locked){
+      const handler=function(){
+        if(isRev)startReview(idx,revKey);
+        else startMission(idx,mi,hasRetry);
+      };
+      item.addEventListener('click',handler);
+      item.addEventListener('touchend',function(e){e.preventDefault();handler();});
+    }
+    wrap.appendChild(item);
+  }
+
+  // Week 1 (M0-2)
+  wkLabel('📅 Week 1','#FF8C00');
+  [0,1,2].forEach(mi=>{
+    const m=l.missions[mi],cl=c.cleared.includes(mi);
+    const prev=mi===0||c.cleared.includes(mi-1);
+    mItem(mi,m,false,cl,!cl);
+  });
+
+  // Week 2 (M3-5)
+  wkLabel('📅 Week 2','#FFA726');
+  [3,4,5].forEach(mi=>{
+    const m=l.missions[mi],cl=c.cleared.includes(mi);
+    const prev=c.cleared.includes(mi-1);
+    mItem(mi,m,false,cl,!cl);
+  });
+
+  // Review 1
+  wkLabel('🔁 Week 2 Review','#AB47BC');
+  const r1Avail=!c.r1;
+  mItem(null,{name:'Week 2 Review',icon:'🔁',desc:'Review weeks 1-2',xp:40},!r1Avail&&!c.r1,c.r1,r1Avail,true,'r1');
+
+  // Week 3-4 (M6-8)
+  wkLabel('📅 Week 3-4','#56C568');
+  [6,7,8].forEach(mi=>{
+    const m=l.missions[mi],cl=c.cleared.includes(mi);
+    const prev=true;
+    mItem(mi,m,false,cl,!cl);
+  });
+
+  // Review 2
+  wkLabel('🏆 Final Review','#4ECDC4');
+  const r2Avail=!c.r2;
+  mItem(null,{name:'Final Review',icon:'🏆',desc:'Review everything!',xp:50},!r2Avail&&!c.r2,c.r2,r2Avail,true,'r2');
+}
+
+/* ═══════════════════════════════════════════════════════
+   GAME ENGINE
+═══════════════════════════════════════════════════════ */
+function startMission(cityIdx,mi,isRetry=false){
+  curCity=cityIdx;curMi=mi;
+  const m=LESSONS[cityIdx].missions[mi];
+  session={qs:[],qi:0,wrong:[],placed:[],flipped:[],matched:0,total:0,canFlip:true,spIdx:0,isRetry,isReview:false,hintShown:false};
+  setupGameHud(LESSONS[cityIdx],m);
+  showScreen('gameScreen');
+  renderMission();
+}
+
+function setupGameHud(l,m){
+  const gt=document.getElementById('gameTop');
+  if(gt)gt.style.background=l.color;
+  const gh=document.getElementById('gameHudTitle');
+  if(gh)gh.textContent=l.emoji+' '+m.name;
+  const gx=document.getElementById('gameHudXp');
+  if(gx)gx.textContent=ST.xp;
+  const gp=document.getElementById('gameProgressFill');
+  if(gp)gp.style.width='0%';
+}
+
+function renderMission(){
+  const m=LESSONS[curCity].missions[curMi];
+  const body=document.getElementById('gameBody');
+  body.innerHTML='';
+  body.style.animation='none';void body.offsetWidth;body.style.animation='fadeIn .35s ease';
+  if(m.id==='flip')renderFlip();
+  else if(m.id==='fill')renderFill();
+  else if(m.id==='ox')renderOX();
+  else if(m.id==='listen')renderListen();
+  else if(m.id==='build')renderBuild();
+  else if(m.id==='video')renderVideo();
+  else if(m.id==='speech')renderSpeech();
+  else if(m.id==='chant')renderChant();
+  else if(m.id==='missioncard')renderMissionCard();
+}
+
+/* ── FLIP ── */
+function renderFlip(){
+  const m=LESSONS[curCity].missions[curMi];
+  const cards=[];
+  m.pairs.forEach((p,i)=>{
+    cards.push({id:'w'+i,pair:i,side:'word',w:p.w,e:p.e});
+    cards.push({id:'e'+i,pair:i,side:'emoji',w:p.w,e:p.e});
+  });
+  for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];}
+  session.flipCards=cards;session.matched=0;session.total=m.pairs.length;
+  session.canFlip=true;session.flipped=[];
+
+  document.getElementById('gameBody').innerHTML=`
+    <div style="text-align:center;margin-bottom:8px;">
+      <span style="font-family:'Baloo 2',cursive;font-size:.9rem;color:var(--muted);">
+        🃏 짝을 찾아요! · <span id="flipCount">0</span>/${m.pairs.length} 쌍
+      </span>
+    </div>
+    <div class="flip-grid" id="flipGrid"></div>`;
+
+  const grid=document.getElementById('flipGrid');
+  cards.forEach((c,ci)=>{
+    const el=document.createElement('div');
+    el.className='flip-card';el.id='fc_'+c.id;
+    el.innerHTML=`<div class="flip-inner">
+      <div class="flip-front"><div class="flip-front-icon">⭐</div></div>
+      <div class="flip-back" id="fb_${c.id}">
+        ${c.side==='emoji'
+          ?`<div class="flip-back-emoji">${c.e}</div><div class="flip-back-word">${c.w}</div>`
+          :`<div class="flip-back-word" style="font-size:1rem;font-family:'Baloo 2',cursive;color:var(--text);text-align:center;padding:4px;">${c.w}</div>`}
+      </div>
+    </div>`;
+    el.onclick=()=>flipTap(c.id,c.pair,c.side,c.w,c.e);
+    grid.appendChild(el);
+  });
+}
+
+function flipTap(id,pair,side,w,e){
+  if(!session.canFlip)return;
+  const el=document.getElementById('fc_'+id);
+  if(!el||el.classList.contains('flipped'))return;
+  el.classList.add('flipped');
+  beep('flip');
+  speak(w,0.88);
+  session.flipped.push({id,pair,side,w,e});
+  if(session.flipped.length===2){
+    session.canFlip=false;
+    const[a,b]=session.flipped;
+    if(a.pair===b.pair&&a.side!==b.side){
+      // match!
+      setTimeout(()=>{
+        beep('match');speak(a.w,0.82);
+        document.getElementById('fb_'+a.id).classList.add('matched');
+        document.getElementById('fb_'+b.id).classList.add('matched');
+        session.matched++;
+        const fc=document.getElementById('flipCount');if(fc)fc.textContent=session.matched;
+        showFb(true,'짝 맞췄어요! 🎉');rainStars();
+        session.flipped=[];session.canFlip=true;
+        if(session.matched===session.total)setTimeout(()=>{session.wrong=[];missionDone();},700);
+      },400);
+    }else{
+      setTimeout(()=>{
+        beep('wrong');showFb(false);
+        [a,b].forEach(x=>{
+          const fc=document.getElementById('fc_'+x.id);const fb=document.getElementById('fb_'+x.id);
+          if(fb)fb.classList.add('wrong');
+          setTimeout(()=>{fc&&fc.classList.remove('flipped');fb&&fb.classList.remove('wrong');},500);
+        });
+        session.flipped=[];session.canFlip=true;
+      },800);
+    }
+  }
+}
+
+/* ── FILL ── */
+let fillLocked=false;
+function renderFill(){
+  const m=LESSONS[curCity].missions[curMi];
+  session.qs=[...m.qs];session.qi=0;session.wrong=[];fillLocked=false;
+  renderFillQ();
+}
+function renderFillQ(){
+  const q=session.qs[session.qi],tot=session.qs.length;
+  updProg();
+  const opts=[...q.opts].sort(()=>Math.random()-.5);
+  document.getElementById('gameBody').innerHTML=`
+    <div style="text-align:center;margin-bottom:8px;">
+      <span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">✏️ ${session.qi+1}/${tot}</span>
+    </div>
+    <div class="choice-question">
+      <div class="choice-img">${q.img}</div>
+      <div class="choice-question-txt">${q.sent.replace('___','<span class="choice-blank">???</span>')}</div>
+      <div style="margin-top:8px;font-size:.78rem;color:var(--muted);font-weight:700;">${q.ko}</div>
+      <button onclick="speakQ()" style="margin-top:8px;background:none;border:2px solid var(--mint);border-radius:999px;padding:5px 14px;font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--mint);cursor:pointer;">🔊 들어봐요</button>
+    </div>
+    <div class="choice-grid" id="fillOpts"></div>`;
+  const og=document.getElementById('fillOpts');
+  opts.forEach(o=>{
+    const btn=document.createElement('button');btn.className='choice-btn';
+    btn.innerHTML=`<span class="choice-btn-word">${o}</span>`;
+    btn.onclick=()=>checkFill(btn,o,q.ans,q.sent);
+    og.appendChild(btn);
+  });
+  setTimeout(()=>speak(q.sent.replace('___',q.ans),.8),300);
+}
+function speakQ(){const q=session.qs[session.qi];speak(q.sent.replace('___',q.ans),.78);}
+function checkFill(btn,ans,correct,sent){
+  if(fillLocked)return;fillLocked=true;
+  if(ans===correct){
+    beep('ok');btn.classList.add('correct');showFb(true);
+    speak(sent.replace('___',ans),.8);
+    setTimeout(()=>{fillLocked=false;session.qi++;updProg();
+      if(session.qi>=session.qs.length)missionDone();else renderFillQ();},950);
+  }else{
+    beep('wrong');btn.classList.add('wrong');showFb(false);
+    if(!session.wrong.includes(session.qi))session.wrong.push(session.qi);
+    setTimeout(()=>{btn.classList.remove('wrong');fillLocked=false;},700);
+  }
+}
+
+/* ── OX ── */
+let oxLocked=false;
+function renderOX(){
+  const m=LESSONS[curCity].missions[curMi];
+  session.qs=[...m.qs];session.qi=0;session.wrong=[];oxLocked=false;
+  renderOXQ();
+}
+function renderOXQ(){
+  const q=session.qs[session.qi],tot=session.qs.length;
+  updProg();
+  document.getElementById('gameBody').innerHTML=`
+    <div style="text-align:center;margin-bottom:8px;">
+      <span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">⭕ ${session.qi+1}/${tot}</span>
+    </div>
+    <div class="ox-wrap">
+      <div class="ox-question-card">
+        <div class="ox-img">${q.img}</div>
+        <div class="ox-sentence">${q.q}</div>
+        <button onclick="speak('${q.q.replace(/'/g,"\\'")}',0.8)" style="margin-top:8px;background:none;border:2px solid var(--mint);border-radius:999px;padding:5px 14px;font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--mint);cursor:pointer;">🔊 들어봐요</button>
+      </div>
+      <div class="ox-buttons">
+        <button class="ox-btn ox-btn-o" onclick="checkOX(true)">⭕<div class="ox-lbl">맞아요!</div></button>
+        <button class="ox-btn ox-btn-x" onclick="checkOX(false)">❌<div class="ox-lbl">틀려요!</div></button>
+      </div>
+    </div>`;
+  setTimeout(()=>speak(q.q,.82),300);
+}
+function checkOX(ans){
+  if(oxLocked)return;oxLocked=true;
+  const q=session.qs[session.qi];
+  const ok=ans===q.ans;
+  if(ok){beep('ok');showFb(true);}else{beep('wrong');showFb(false);if(!session.wrong.includes(session.qi))session.wrong.push(session.qi);}
+  setTimeout(()=>{oxLocked=false;session.qi++;updProg();
+    if(session.qi>=session.qs.length)missionDone();else renderOXQ();},900);
+}
+
+/* ── LISTEN ── */
+let listenLocked=false;
+function renderListen(){
+  const m=LESSONS[curCity].missions[curMi];
+  session.qs=[...m.words];session.qi=0;session.wrong=[];listenLocked=false;
+  renderListenQ();
+}
+function renderListenQ(){
+  const q=session.qs[session.qi],tot=session.qs.length;
+  updProg();
+  const opts=[{e:q.e,w:q.w,ok:true},...(q.ds||[]).slice(0,3).map(d=>({e:d,w:'?',ok:false}))].sort(()=>Math.random()-.5);
+  document.getElementById('gameBody').innerHTML=`
+    <div style="text-align:center;margin-bottom:8px;">
+      <span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">👂 ${session.qi+1}/${tot} · 소리 듣고 찾아요!</span>
+    </div>
+    <div class="listen-card">
+      <button class="listen-speaker-btn" id="speakerBtn" onclick="playListenWord()">🔊</button>
+      <div class="listen-hint">들리는 단어를 눌러요!</div>
+    </div>
+    <div class="listen-choices" id="listenChoices"></div>`;
+  const cg=document.getElementById('listenChoices');
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='listen-choice';
+    d.innerHTML=`<span class="listen-choice-emoji">${o.e}</span><div class="listen-choice-word">${o.ok?o.w:'?'}</div>`;
+    d.onclick=()=>checkListen(o.ok,o.e,o.w,d);
+    cg.appendChild(d);
+  });
+  setTimeout(()=>playListenWord(),350);
+}
+function playListenWord(){
+  const q=session.qs[session.qi];
+  const btn=document.getElementById('speakerBtn');
+  if(btn){btn.classList.add('playing');setTimeout(()=>{if(btn)btn.classList.remove('playing');},900);}
+  speak(q.w,.8,1.12);
+}
+function checkListen(ok,emoji,word,el){
+  if(listenLocked)return;listenLocked=true;
+  if(ok){
+    beep('ok');el.classList.add('correct');showFb(true);speak(word,.82);
+    setTimeout(()=>{listenLocked=false;session.qi++;updProg();
+      if(session.qi>=session.qs.length)missionDone();else{listenLocked=false;renderListenQ();}},950);
+  }else{
+    beep('wrong');el.classList.add('wrong');showFb(false);
+    if(!session.wrong.includes(session.qi))session.wrong.push(session.qi);
+    setTimeout(()=>{el.classList.remove('wrong');listenLocked=false;},700);
+  }
+}
+
+/* ── BUILD ── */
+function renderBuild(){
+  const m=LESSONS[curCity].missions[curMi];
+  session.qs=[...m.qs];session.qi=0;session.wrong=[];session.placed=[];
+  renderBuildQ();
+}
+function renderBuildQ(){
+  const q=session.qs[session.qi],tot=session.qs.length;
+  updProg();
+  const pool=[...q.ans,...(q.extra||[])].sort(()=>Math.random()-.5);
+  session.pool=pool;session.placed=[];session.bAns=q.ans;session.bAttempts=0;
+  speak(q.full,.78,1.05);
+  document.getElementById('gameBody').innerHTML=`
+    <div style="text-align:center;margin-bottom:8px;">
+      <span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">🧩 ${session.qi+1}/${tot} · 문장을 만들어요!</span>
+    </div>
+    <div class="build-wrap">
+      <div class="build-target">
+        <div style="font-family:'Baloo 2',cursive;font-size:2.8rem;text-align:center;width:100%;margin-bottom:6px;">${q.img}</div>
+        <div class="build-slots" id="buildSlots"><span style="color:#FFB347;font-family:'Baloo 2',cursive;font-size:.88rem;opacity:.7;" id="buildPh">단어를 순서대로 눌러요!</span></div>
+      </div>
+      <button onclick="speak('${(q.full).replace(/'/g,"\\'")}',0.78)" style="width:100%;padding:10px;border-radius:var(--r-md);background:rgba(78,205,196,.15);border:2.5px solid var(--mint);font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--mint);cursor:pointer;margin-bottom:10px;">🔊 다시 들어요</button>
+      <div class="build-tiles" id="buildTiles"></div>
+      <button class="build-check-btn" id="buildCheckBtn" onclick="checkBuild()" disabled style="opacity:.4;">✅ 확인!</button>
+      <div id="buildMsg" style="text-align:center;min-height:20px;font-family:'Baloo 2',cursive;font-size:.88rem;margin-top:6px;"></div>
+    </div>`;
+  renderBuildTiles();
+}
+function renderBuildTiles(){
+  const tg=document.getElementById('buildTiles');if(!tg)return;
+  tg.innerHTML='';
+  session.pool.forEach((w,wi)=>{
+    const t=document.createElement('div');t.className='build-tile'+(session.placed.some(p=>p.wi===wi)?' used':'');
+    t.id='bt'+wi;t.textContent=w;t.onclick=()=>addBuildTile(wi,w,t);
+    tg.appendChild(t);
+  });
+}
+function addBuildTile(wi,w,el){
+  if(session.placed.some(p=>p.wi===wi))return;
+  session.placed.push({wi,w});
+  beep('flip');speak(w,.9);
+  const sl=document.getElementById('buildSlots');
+  const ph=document.getElementById('buildPh');if(ph)ph.style.display='none';
+  const chip=document.createElement('div');chip.className='build-slot-word';chip.textContent=w;
+  chip.onclick=()=>removeBuildTile(wi,chip,el);
+  sl.appendChild(chip);
+  el.classList.add('used');
+  const btn=document.getElementById('buildCheckBtn');
+  if(btn&&session.placed.length>=session.bAns.length){btn.disabled=false;btn.style.opacity='1';}
+}
+function removeBuildTile(wi,chip,el){
+  session.placed=session.placed.filter(p=>p.wi!==wi);
+  chip.remove();
+  el.classList.remove('used');
+  const btn=document.getElementById('buildCheckBtn');
+  if(btn){btn.disabled=true;btn.style.opacity='.4';}
+  const sl=document.getElementById('buildSlots');
+  if(sl&&!sl.querySelector('.build-slot-word')){
+    const ph=document.getElementById('buildPh');if(ph)ph.style.display='';
+  }
+}
+function checkBuild(){
+  const placed=session.placed.map(p=>p.w);
+  const ok=JSON.stringify(placed)===JSON.stringify(session.bAns);
+  const msg=document.getElementById('buildMsg');
+  if(ok){
+    beep('ok');showFb(true);speak(session.bAns.join(' '),.78);rainStars();
+    if(msg)msg.textContent='';
+    setTimeout(()=>{session.qi++;updProg();
+      if(session.qi>=session.qs.length)missionDone();else{session.placed=[];renderBuildQ();}},1100);
+  }else{
+    beep('wrong');showFb(false);
+    session.bAttempts++;
+    if(!session.wrong.includes(session.qi))session.wrong.push(session.qi);
+    if(msg){msg.style.color=session.bAttempts>=2?'var(--orange)':'var(--red)';
+      msg.textContent=session.bAttempts>=2?`💡 힌트: "${session.bAns[0]}"로 시작해요!`:'❌ 순서가 달라요. 다시 해봐요!';}
+    // clear placed
+    session.placed=[];
+    const sl=document.getElementById('buildSlots');
+    if(sl){sl.querySelectorAll('.build-slot-word').forEach(c=>c.remove());
+      const ph=document.getElementById('buildPh');if(ph)ph.style.display='';}
+    renderBuildTiles();
+    const btn=document.getElementById('buildCheckBtn');if(btn){btn.disabled=true;btn.style.opacity='.4';}
+    setTimeout(()=>{if(msg)msg.textContent='';},2500);
+  }
+}
+
+/* ── VIDEO ── */
+function renderVideo(){
+  const l=LESSONS[curCity],m=l.missions[curMi];
+  document.getElementById('gameBody').innerHTML=`
+    <div class="video-intro">
+      <div class="video-intro-img">🎬</div>
+      <div class="video-intro-txt">${l.city} 추천 영상</div>
+      <div style="margin:8px 0;font-size:.78rem;color:var(--muted);">보고 나서 ✅ 버튼을 눌러요!</div>
+      <div style="background:#F5F0EA;border-radius:var(--r-md);padding:12px;margin-top:8px;text-align:left;">
+        <div style="font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--text);margin-bottom:6px;">👀 이런 걸 찾아봐요!</div>
+        ${(m.points||[]).map(p=>`<div style="font-size:.8rem;color:var(--muted);padding:3px 0;">${p}</div>`).join('')}
+      </div>
+    </div>
+    <div id="vidArea"><div class="video-loading"><div class="video-loading-emoji">🔍</div><div style="font-family:'Baloo 2',cursive;font-size:.9rem;margin-top:8px;">영상 찾는 중...</div></div></div>`;
+  fetchVids(l.city,m.points||[]);
+}
+
+function showVids(vids){
+  const area=document.getElementById('vidArea');if(!area)return;
+  area.innerHTML='<div class="video-grid" id="vidGrid"></div><button class="build-check-btn" id="vidDoneBtn" style="opacity:.4;margin-top:14px;" disabled onclick="session.wrong=[];missionDone();">✅ 영상 봤어요!</button>';
+  const grid=document.getElementById('vidGrid');
+  vids.forEach((v,i)=>{
+    const tid=v.videoId&&v.videoId.length===11?v.videoId:null;
+    const thumb=tid?`https://img.youtube.com/vi/${tid}/mqdefault.jpg`:'';
+    const url=tid?`https://www.youtube.com/watch?v=${tid}`:`https://www.youtube.com/results?search_query=${encodeURIComponent(v.title+' for kids')}`;
+    const card=document.createElement('div');card.className='video-thumb';
+    card.innerHTML=`${thumb?`<img src="${thumb}" onerror="this.style.display='none'" alt="${v.title}">`:'<div style="width:100%;aspect-ratio:16/9;background:#E8E8E8;display:flex;align-items:center;justify-content:center;font-size:2rem;">🎬</div>'}
+      <div class="video-thumb-info"><div class="video-thumb-title">${v.title}</div><div style="font-size:.65rem;color:var(--muted);margin-top:2px;">${v.channel||''} · ${v.views||''}</div></div>`;
+    card.onclick=()=>{
+      window.open(url,'_blank');
+      grid.querySelectorAll('.video-thumb').forEach(c=>c.style.borderColor='');
+      card.classList.add('watched');
+      setTimeout(()=>{
+        const btn=document.getElementById('vidDoneBtn');
+        if(btn){btn.disabled=false;btn.style.opacity='1';}
+        toast('영상을 봤어요!','🎬');
+      },1200);
+    };
+    grid.appendChild(card);
+  });
+}
+
+/* ── SPEECH ── */
+function renderSpeech(){
+  const m=LESSONS[curCity].missions[curMi];
+  session.spIdx=0;
+  renderSpeechQ();
+}
+function renderSpeechQ(){
+  const m=LESSONS[curCity].missions[curMi];
+  const idx=session.spIdx,tot=m.sents.length,s=m.sents[idx];
+  updProg((idx/tot*100));
+  session.recMaxSec=30; session.recAttempts=session.recAttempts||0;
+  document.getElementById('gameBody').innerHTML=`
+    <div style="text-align:center;margin-bottom:8px;"><span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">🎤 ${idx+1}/${tot}</span></div>
+    <div class="speech-wrap">
+      <div class="speech-card">
+        <div class="speech-img">${s.e}</div>
+        <div class="speech-text">
+          <div class="eng" style="font-size:1.3rem;color:#C2410C;font-family:'Baloo 2',cursive;">${s.en}</div>
+          <div class="kor" style="font-size:.82rem;color:var(--muted);margin-top:4px;">${s.ko}</div>
+        </div>
+        <button class="native-btn" id="nativeBtn" onclick="playNative()" style="margin-top:12px;">🔊 원어민 발음 듣기</button>
+      </div>
+      <div style="background:#fff;border-radius:var(--r-xl);padding:18px;box-shadow:var(--card-shadow);text-align:center;">
+        <div style="font-family:'Baloo 2',cursive;font-size:.88rem;margin-bottom:6px;">🎤 따라 말하고 녹음해요! <span style="color:var(--orange);">(30초)</span></div>
+        <div style="height:8px;background:#F0F0F0;border-radius:8px;overflow:hidden;margin-bottom:12px;">
+          <div id="timerBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--mint),var(--orange));border-radius:8px;transition:width .5s linear;"></div>
+        </div>
+        <div id="timerLabel" style="font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--muted);margin-bottom:10px;">준비 완료!</div>
+        <div class="rec-area"><button class="rec-btn" id="recBtn" onclick="startSpeechRec()">🎤</button><div class="rec-lbl" id="recLbl">버튼을 눌러 녹음 시작!</div></div>
+        <div class="rec-playback" id="recPlay" style="display:none;margin-top:10px;">
+          <div class="rec-playback-row"><span style="font-size:.72rem;font-weight:800;color:#5B21B6;white-space:nowrap;">🎧 내 발음</span><audio id="recAudio" controls style="flex:1;height:32px;"></audio></div>
+        </div>
+        <div id="speechResult" style="display:none;margin-top:10px;">
+          <div id="speechResultMsg" style="font-family:'Baloo 2',cursive;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="retrySpeech()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">🔄 다시 녹음</button>
+            <button onclick="spSubmit()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">✅ ${idx+1<tot?'다음!':'완료!'}</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  setTimeout(()=>playNative(),400);
+}
+
+function playNative(){
+  const m=LESSONS[curCity].missions[curMi];
+  const s=m.sents[session.spIdx];
+  const btn=document.getElementById('nativeBtn');
+  if(btn){btn.classList.add('playing');setTimeout(()=>{if(btn)btn.classList.remove('playing');},900);}
+  speak(s.en,.8,1.08);
+}
+function spSubmit(){
+  session.spIdx++;
+  const m=LESSONS[curCity].missions[curMi];
+  if(session.spIdx>=m.sents.length){session.wrong=[];missionDone();}
+  else renderSpeechQ();
+}
+
+/* ── CHANT ── */
+function renderChant(){
+  const m=LESSONS[curCity].missions[curMi];
+  session.recMaxSec=30; session.recAttempts=0;
+  document.getElementById('gameBody').innerHTML=`
+    <div style="text-align:center;margin-bottom:8px;"><div style="font-family:'Baloo 2',cursive;font-size:.9rem;color:var(--muted);">🎵 챈트 부르기</div></div>
+    <div class="chant-card" id="chantCard">
+      <div class="chant-img">${m.img||'🎵'}</div>
+      <div class="chant-lines" id="chantLines">
+        ${m.lines.map((l,i)=>`<div class="chant-line${i%2===0?' hl':''}" id="cline${i}" style="transition:all .3s;">${l}</div>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button class="chant-listen-btn" id="chantPlayBtn" onclick="playChantRhythmic()" style="flex:1;">▶ 챈트 듣기</button>
+      <button class="chant-listen-btn" onclick="playChantRhythmic()" style="flex:0 0 auto;min-width:48px;">🔁</button>
+    </div>
+    <div style="background:#fff;border-radius:var(--r-xl);padding:18px;box-shadow:var(--card-shadow);text-align:center;">
+      <div style="font-family:'Baloo 2',cursive;font-size:.88rem;margin-bottom:6px;">🎤 따라 불러봐요! <span style="color:var(--orange);">(30초)</span></div>
+      <div style="height:8px;background:#F0F0F0;border-radius:8px;overflow:hidden;margin-bottom:10px;">
+        <div id="timerBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--lav),var(--orange));border-radius:8px;transition:width .5s linear;"></div>
+      </div>
+      <div id="timerLabel" style="font-family:'Baloo 2',cursive;font-size:.8rem;color:var(--muted);margin-bottom:8px;">챈트를 먼저 듣고 따라 불러요!</div>
+      <button class="rec-btn" id="recBtn" onclick="startSpeechRec()">🎤</button>
+      <div class="rec-lbl" id="recLbl">버튼 눌러 녹음!</div>
+      <div class="rec-playback" id="recPlay" style="display:none;margin-top:8px;">
+        <div class="rec-playback-row"><span style="font-size:.72rem;font-weight:800;color:#5B21B6;white-space:nowrap;">🎧 내 챈트</span><audio id="recAudio" controls style="flex:1;height:32px;"></audio></div>
+      </div>
+      <div id="speechResult" style="display:none;margin-top:10px;">
+        <div id="speechResultMsg" style="font-family:'Baloo 2',cursive;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="retrySpeech()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">🔄 다시!</button>
+          <button onclick="session.wrong=[];missionDone()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">🎉 완료!</button>
+        </div>
+      </div>
+    </div>`;
+  setTimeout(()=>playChantRhythmic(),600);
+}
+
+function renderMissionCard(){
+  const m=LESSONS[curCity].missions[curMi];
+  session.recMaxSec=30; session.recAttempts=0;
+  document.getElementById('gameBody').innerHTML=`
+    <div style="text-align:center;margin-bottom:8px;"><div style="font-family:'Baloo 2',cursive;font-size:.9rem;color:var(--muted);">📋 미션 카드 · 30초 안에 읽어요!</div></div>
+    <div class="mission-card-wrap">
+      <div class="mission-card-visual">
+        <div class="mc-trophy">${m.img||'🏆'}</div>
+        <div class="mc-title">${m.title}</div>
+        ${m.steps.map((s,i)=>`
+          <div class="mc-step" id="mcstep${i}" style="transition:all .3s;">
+            <div class="mc-num" id="mcnum${i}">${i+1}</div>
+            <div class="mc-text">${s.e} <strong>"${s.bold}"</strong><br>
+              <span style="color:var(--muted);font-size:.75rem;">${s.ko}</span>
+              <button class="speak-step-btn" data-txt="${s.bold.replace(/"/g,'&quot;')}" style="background:none;border:none;font-size:.95rem;cursor:pointer;margin-left:4px;">🔊</button>
+            </div>
+          </div>`).join('')}
+      </div>
+      <button id="mcListenAllBtn" onclick="mcListenAll()" style="width:100%;padding:12px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--mint),#2DC7BC);color:#fff;font-family:'Baloo 2',cursive;font-size:.95rem;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px;">🔊 전체 문장 듣기</button>
+      <div style="background:#fff;border-radius:var(--r-xl);padding:18px;text-align:center;box-shadow:var(--card-shadow);">
+        <div style="font-family:'Baloo 2',cursive;font-size:.88rem;margin-bottom:4px;">🎤 30초 안에 전부 말해봐요!</div>
+        <div style="font-size:.75rem;color:var(--orange);font-family:'Baloo 2',cursive;margin-bottom:10px;">"${m.rec}"</div>
+        <div style="height:10px;background:#F0F0F0;border-radius:8px;overflow:hidden;margin-bottom:8px;">
+          <div id="timerBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--mint),var(--orange));border-radius:8px;transition:width .5s linear;"></div>
+        </div>
+        <div id="timerLabel" style="font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--muted);margin-bottom:10px;">먼저 문장을 들어보세요!</div>
+        <button class="rec-btn" id="recBtn" onclick="startMCRec()">🎤</button>
+        <div class="rec-lbl" id="recLbl">버튼 눌러 녹음 시작!</div>
+        <div class="rec-playback" id="recPlay" style="display:none;margin-top:10px;">
+          <div class="rec-playback-row"><span style="font-size:.72rem;font-weight:800;color:#5B21B6;white-space:nowrap;">🎧 내 목소리</span><audio id="recAudio" controls style="flex:1;height:32px;"></audio></div>
+        </div>
+        <div id="speechResult" style="display:none;margin-top:10px;">
+          <div id="speechResultMsg" style="font-family:'Baloo 2',cursive;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="retryMC()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">🔄 다시 도전!</button>
+            <button onclick="session.wrong=[];missionDone()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">✅ 미션 완료!</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.querySelectorAll('.speak-step-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>speakNatural(btn.getAttribute('data-txt')));
+  });
+  setTimeout(()=>mcListenAll(),500);
+}
+
+/* ── PROGRESS ── */
+function updProg(pct){
+  if(pct!==undefined){document.getElementById('gameProgressFill').style.width=pct+'%';return;}
+  const m=LESSONS[curCity].missions[curMi];
+  if(['fill','ox','listen','build'].includes(m.id)){
+    const total=session.qs.length||1;
+    const __pf=document.getElementById('gameProgressFill');if(__pf)__pf.style.width=Math.round((session.qi/total)*100)+'%';
+  }
+  // progress dots
+  const dotsEl=document.getElementById('gameProgDots');
+  if(dotsEl&&['fill','ox','listen','build'].includes(m.id)){
+    dotsEl.innerHTML='';
+    const tot=session.qs.length;
+    for(let i=0;i<Math.min(tot,8);i++){
+      const d=document.createElement('div');
+      d.className='gpd'+(i<session.qi?' done':i===session.qi?' now':'');
+      dotsEl.appendChild(d);
+    }
+  }
+}
+
+/* ── MISSION DONE ── */
+function missionDone(){
+  if(session.isReview===true){revAdvance();return;}
+  const m=LESSONS[curCity].missions[curMi];
+  const c=ST.cities[curCity];
+  const wr=session.wrong||[];
+  const fullClear=wr.length===0;
+
+  if(fullClear){
+    if(!c.cleared.includes(curMi))c.cleared.push(curMi);
+    delete c.retry[curMi];
+  }else{
+    c.retry[curMi]=wr;
+  }
+  const xpG=fullClear?m.xp:Math.round(m.xp*.4);
+  const oldLv=ST.lv;
+  ST.xp+=xpG;ST.lv=getLv(ST.xp);save();refreshHUD();
+
+  showResult({
+    emoji:fullClear?'🏆':'💪',
+    title:fullClear?'클리어! 🎉':'다시 도전해요!',
+    sub:fullClear?`${m.name} 완료!\n정말 잘했어요! 👏`:`${wr.length}개 틀렸어요.\n다시 풀면 더 잘할 수 있어요!`,
+    xp:xpG,lvUp:ST.lv>oldLv,fullClear,isReview:false
+  });
+}
+
+function showResult({emoji,title,sub,xp,lvUp,fullClear,isReview}){
+  const body=document.getElementById('gameBody');
+  if(fullClear)rainStars();
+
+  // Build result screen inline
+  const l=LESSONS[curCity],m=l.missions[curMi];
+  const nextMi=curMi+1;
+  const c=ST.cities[curCity];
+
+  body.innerHTML=`
+    <div style="text-align:center;padding:24px 20px 16px;background:linear-gradient(135deg,#FFF9F0,#FFF3E0);border-radius:var(--r-xl);margin-bottom:16px;box-shadow:var(--card-shadow);">
+      <div style="font-size:4.5rem;margin-bottom:6px;">${emoji}</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:1.6rem;color:var(--text);margin-bottom:6px;">${title}</div>
+      <div style="font-size:.88rem;color:var(--muted);font-weight:700;white-space:pre-line;margin-bottom:12px;">${sub}</div>
+      <div style="display:inline-block;background:linear-gradient(135deg,var(--sun),var(--peach));border-radius:999px;padding:8px 20px;font-family:'Baloo 2',cursive;font-size:1.05rem;color:#fff;">⚡ +${xp} XP</div>
+      ${lvUp?`<div style="margin-top:8px;background:linear-gradient(135deg,var(--lavender),#9B59B6);border-radius:999px;padding:8px 20px;font-family:'Baloo 2',cursive;font-size:1rem;color:#fff;">🎊 Lv.${ST.lv} 달성!</div>`:''}
+    </div>
+    <div id="resultBtns" style="display:flex;flex-direction:column;gap:10px;"></div>`;
+
+  const btnsEl=document.getElementById('resultBtns');
+
+  if(!isReview&&!fullClear){
+    const rb=makeBtn('⚠️ 틀린 문제 다시 풀기','#FF6B35','#fff',()=>startMission(curCity,curMi,true));
+    btnsEl.appendChild(rb);
+  }
+  if(!isReview&&fullClear&&nextMi<l.missions.length){
+    const nb=makeBtn(`▶ ${l.missions[nextMi].name} 도전!`,l.color,'#fff',()=>startMission(curCity,nextMi,false));
+    btnsEl.appendChild(nb);
+  }
+  if(!isReview&&fullClear&&curMi===5&&!c.r1){
+    const rev=makeBtn('🔁 2주차 리뷰하러 가요!','linear-gradient(135deg,#AB47BC,#7B1FA2)','#fff',()=>startReview(curCity,'r1'));
+    btnsEl.appendChild(rev);
+  }
+  if(!isReview&&fullClear&&curMi===8&&!c.r2){
+    const rev=makeBtn('🏆 4주차 종합 리뷰!','linear-gradient(135deg,#1E88E5,#0D47A1)','#fff',()=>startReview(curCity,'r2'));
+    btnsEl.appendChild(rev);
+  }
+  const backBtn=makeBtn('← 미션 목록으로','#F3F4F6','var(--text)',()=>openCity(curCity));
+  btnsEl.appendChild(backBtn);
+
+  if(lvUp){
+    const lo=document.getElementById('lvupOverlay');
+    document.getElementById('lvupSub').textContent=`Lv.${ST.lv} 달성! 대단해요 🎉`;
+    lo.classList.add('show');
+    setTimeout(()=>lo.classList.remove('show'),3000);
+  }
+}
+function makeBtn(txt,bg,col,fn){
+  const b=document.createElement('button');
+  b.style.cssText=`padding:14px;border-radius:var(--r-lg);border:none;font-family:'Baloo 2',cursive;font-size:1rem;cursor:pointer;background:${bg};color:${col};box-shadow:0 4px 16px rgba(0,0,0,.1);transition:transform .15s;`;
+  b.textContent=txt;b.onclick=fn;
+  b.addEventListener('mousedown',()=>b.style.transform='scale(.97)');
+  b.addEventListener('mouseup',()=>b.style.transform='');
+  return b;
+}
+function closeLvUp(){document.getElementById('lvupOverlay').classList.remove('show');}
+
+/* ─ FADEUP KEYFRAME ─ */
+const ks=document.createElement('style');
+ks.textContent='@keyframes fadeIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}';
+document.head.appendChild(ks);
+
+const CITY_VIDEO_DATA={
+"New York":[
+{"title":"New York City Song for Kids","channel":"Jack Hartmann","url":"https://www.youtube.com/results?search_query=New%20York%20City%20kids%20ESL%20English%20song&sp=CAMSAhAB","duration":"3:00","views":"500K+"},
+{"title":"Statue of Liberty for Kids","channel":"National Geographic Kids","url":"https://www.youtube.com/results?search_query=Statue%20of%20Liberty%20kids%20educational%20English&sp=CAMSAhAB","duration":"4:00","views":"1M+"},
+{"title":"I Love New York Song","channel":"Kids Learning","url":"https://www.youtube.com/results?search_query=I%20love%20New%20York%20children%20song%20English%20ESL&sp=CAMSAhAB","duration":"2:30","views":"800K+"},
+{"title":"New York City Tour for Kids","channel":"Blippi","url":"https://www.youtube.com/results?search_query=New%20York%20City%20Blippi%20kids%20tour%20educational&sp=CAMSAhAB","duration":"8:00","views":"5M+"},
+],
+"Texas":[
+{"title":"Cowboy Song for Kids","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=cowboy%20song%20kids%20ESL%20English%20yeehaw&sp=CAMSAhAB","duration":"2:30","views":"2M+"},
+{"title":"Texas Song for Children","channel":"Kids Learning Tube","url":"https://www.youtube.com/results?search_query=Texas%20kids%20song%20educational%20English%20children&sp=CAMSAhAB","duration":"3:00","views":"1M+"},
+{"title":"Farm Animals Song","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=farm%20animals%20song%20kids%20ESL%20English%20Super%20Simple%20Songs&sp=CAMSAhAB","duration":"2:00","views":"100M+"},
+{"title":"Cowboys and Horses","channel":"Blippi","url":"https://www.youtube.com/results?search_query=Blippi%20cowboy%20ranch%20kids%20educational%20English&sp=CAMSAhAB","duration":"6:00","views":"3M+"},
+],
+"Boston":[
+{"title":"Body Parts Song for Kids","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=body%20parts%20song%20kids%20ESL%20English%20Super%20Simple%20Songs&sp=CAMSAhAB","duration":"2:00","views":"200M+"},
+{"title":"Head Shoulders Knees and Toes","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=Head%20Shoulders%20Knees%20Toes%20CoComelon%20English%20kids%20song&sp=CAMSAhAB","duration":"2:00","views":"500M+"},
+{"title":"Human Body for Kids","channel":"National Geographic Kids","url":"https://www.youtube.com/results?search_query=human%20body%20kids%20educational%20English&sp=CAMSAhAB","duration":"4:00","views":"2M+"},
+{"title":"Brain Song for Kids","channel":"Jack Hartmann","url":"https://www.youtube.com/results?search_query=brain%20body%20parts%20song%20Jack%20Hartmann%20kids%20ESL&sp=CAMSAhAB","duration":"3:00","views":"1M+"},
+],
+"Florida":[
+{"title":"Disney World for Kids","channel":"Blippi","url":"https://www.youtube.com/results?search_query=Blippi%20Disney%20World%20kids%20educational%20English&sp=CAMSAhAB","duration":"10:00","views":"20M+"},
+{"title":"Magic Castle Song","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=castle%20magic%20song%20kids%20ESL%20English%20CoComelon&sp=CAMSAhAB","duration":"2:30","views":"50M+"},
+{"title":"Ocean Animals Song","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=ocean%20animals%20song%20Super%20Simple%20Songs%20kids%20ESL&sp=CAMSAhAB","duration":"2:30","views":"50M+"},
+{"title":"Theme Park Adventure","channel":"Blippi","url":"https://www.youtube.com/results?search_query=amusement%20park%20ride%20kids%20educational%20English%20Blippi&sp=CAMSAhAB","duration":"8:00","views":"10M+"},
+],
+"San Francisco":[
+{"title":"Golden Gate Bridge for Kids","channel":"Kids Learning Tube","url":"https://www.youtube.com/results?search_query=Golden%20Gate%20Bridge%20kids%20educational%20English%20song&sp=CAMSAhAB","duration":"3:00","views":"500K+"},
+{"title":"Ocean Animals Song","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=ocean%20animals%20song%20Super%20Simple%20Songs%20kids%20ESL%20English&sp=CAMSAhAB","duration":"2:30","views":"50M+"},
+{"title":"Under the Sea Song","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=under%20the%20sea%20song%20kids%20ESL%20English%20CoComelon&sp=CAMSAhAB","duration":"2:00","views":"30M+"},
+{"title":"Sea Animals with Blippi","channel":"Blippi","url":"https://www.youtube.com/results?search_query=Blippi%20fish%20aquarium%20sea%20animals%20kids%20educational%20English&sp=CAMSAhAB","duration":"5:00","views":"5M+"},
+],
+"Iowa":[
+{"title":"Old MacDonald Had a Farm","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=Old%20MacDonald%20farm%20Super%20Simple%20Songs%20kids%20ESL%20English&sp=CAMSAhAB","duration":"2:30","views":"500M+"},
+{"title":"Farm Animals Song","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=farm%20animals%20CoComelon%20kids%20ESL%20English%20song&sp=CAMSAhAB","duration":"2:00","views":"200M+"},
+{"title":"The Farmer in the Dell","channel":"Kids Nursery Rhymes","url":"https://www.youtube.com/results?search_query=farmer%20song%20kids%20ESL%20English%20nursery%20rhyme&sp=CAMSAhAB","duration":"2:00","views":"20M+"},
+{"title":"Vegetables Song","channel":"Jack Hartmann","url":"https://www.youtube.com/results?search_query=vegetables%20song%20Jack%20Hartmann%20kids%20ESL%20English&sp=CAMSAhAB","duration":"3:00","views":"2M+"},
+],
+"New Orleans":[
+{"title":"Musical Instruments Song","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=musical%20instruments%20song%20Super%20Simple%20Songs%20kids%20ESL&sp=CAMSAhAB","duration":"2:30","views":"10M+"},
+{"title":"Dance Song for Children","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=dance%20song%20kids%20ESL%20English%20CoComelon%20children&sp=CAMSAhAB","duration":"2:00","views":"100M+"},
+{"title":"Jazz for Kids","channel":"Little Baby Bum","url":"https://www.youtube.com/results?search_query=jazz%20music%20instruments%20kids%20educational%20English%20children&sp=CAMSAhAB","duration":"3:00","views":"1M+"},
+{"title":"Move and Groove Song","channel":"Jack Hartmann","url":"https://www.youtube.com/results?search_query=dance%20movement%20song%20Jack%20Hartmann%20kids%20ESL%20English&sp=CAMSAhAB","duration":"3:00","views":"5M+"},
+],
+"Minnesota":[
+{"title":"Wild Animals Song","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=wild%20animals%20song%20Super%20Simple%20Songs%20kids%20ESL%20English&sp=CAMSAhAB","duration":"2:30","views":"20M+"},
+{"title":"Bear Song","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=bear%20song%20kids%20ESL%20English%20CoComelon%20children&sp=CAMSAhAB","duration":"2:00","views":"50M+"},
+{"title":"Forest Animals for Kids","channel":"National Geographic Kids","url":"https://www.youtube.com/results?search_query=forest%20animals%20kids%20educational%20English%20National%20Geographic&sp=CAMSAhAB","duration":"4:00","views":"2M+"},
+{"title":"Nature Adventure","channel":"Blippi","url":"https://www.youtube.com/results?search_query=Blippi%20nature%20forest%20animals%20kids%20educational%20English&sp=CAMSAhAB","duration":"6:00","views":"5M+"},
+],
+"Vermont":[
+{"title":"Seasons Song","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=seasons%20song%20Super%20Simple%20Songs%20kids%20ESL%20English%20autumn%20fall&sp=CAMSAhAB","duration":"2:30","views":"50M+"},
+{"title":"Autumn Leaves Song","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=autumn%20fall%20leaves%20song%20kids%20ESL%20English%20CoComelon&sp=CAMSAhAB","duration":"2:00","views":"10M+"},
+{"title":"Fall Colors Song","channel":"Jack Hartmann","url":"https://www.youtube.com/results?search_query=fall%20colors%20red%20orange%20yellow%20Jack%20Hartmann%20kids%20ESL&sp=CAMSAhAB","duration":"3:00","views":"2M+"},
+{"title":"Maple Syrup for Kids","channel":"Kids Learning Tube","url":"https://www.youtube.com/results?search_query=maple%20syrup%20Vermont%20kids%20educational%20English%20song&sp=CAMSAhAB","duration":"3:00","views":"500K+"},
+],
+"Alaska":[
+{"title":"Arctic Animals Song","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=arctic%20polar%20animals%20song%20Super%20Simple%20Songs%20kids%20ESL&sp=CAMSAhAB","duration":"2:30","views":"5M+"},
+{"title":"Polar Bear Song","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=polar%20bear%20song%20kids%20ESL%20English%20CoComelon%20children&sp=CAMSAhAB","duration":"2:00","views":"20M+"},
+{"title":"Northern Lights for Kids","channel":"National Geographic Kids","url":"https://www.youtube.com/results?search_query=northern%20lights%20aurora%20borealis%20kids%20educational%20English&sp=CAMSAhAB","duration":"4:00","views":"1M+"},
+{"title":"Arctic with Blippi","channel":"Blippi","url":"https://www.youtube.com/results?search_query=Blippi%20Alaska%20winter%20snow%20cold%20kids%20educational%20English&sp=CAMSAhAB","duration":"6:00","views":"3M+"},
+],
+"Washington DC":[
+{"title":"US Presidents Song","channel":"Jack Hartmann","url":"https://www.youtube.com/results?search_query=US%20president%20USA%20song%20Jack%20Hartmann%20kids%20ESL%20English&sp=CAMSAhAB","duration":"3:00","views":"2M+"},
+{"title":"American Flag Song","channel":"Have Fun Teaching","url":"https://www.youtube.com/results?search_query=American%20flag%20USA%20song%20kids%20ESL%20English%20patriotic&sp=CAMSAhAB","duration":"2:30","views":"5M+"},
+{"title":"Washington DC for Kids","channel":"Kids Learning Tube","url":"https://www.youtube.com/results?search_query=Washington%20DC%20capital%20USA%20kids%20educational%20English%20song&sp=CAMSAhAB","duration":"3:00","views":"500K+"},
+{"title":"USA Song for Kids","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=USA%20America%20song%20kids%20ESL%20English%20children%20patriotic&sp=CAMSAhAB","duration":"2:00","views":"10M+"},
+],
+"Hollywood":[
+{"title":"Movie Star Song","channel":"Super Simple Songs","url":"https://www.youtube.com/results?search_query=movie%20star%20song%20kids%20ESL%20English%20Super%20Simple%20Songs&sp=CAMSAhAB","duration":"2:30","views":"5M+"},
+{"title":"Lights Camera Action","channel":"Jack Hartmann","url":"https://www.youtube.com/results?search_query=lights%20camera%20action%20song%20Jack%20Hartmann%20kids%20ESL%20English&sp=CAMSAhAB","duration":"3:00","views":"1M+"},
+{"title":"Hollywood for Kids","channel":"Kids Learning Tube","url":"https://www.youtube.com/results?search_query=Hollywood%20movies%20kids%20educational%20English%20song&sp=CAMSAhAB","duration":"3:00","views":"500K+"},
+{"title":"I'm a Star Song","channel":"CoComelon","url":"https://www.youtube.com/results?search_query=star%20movie%20actor%20song%20kids%20ESL%20English%20CoComelon&sp=CAMSAhAB","duration":"2:00","views":"20M+"},
+],
+};
+
+const CITY_VIDEO_TOPICS={
+  "New York":"kids ESL Statue of Liberty New York English song TPR",
+  "Texas":"kids ESL Texas cowboy ranch English song TPR children",
+  "Boston":"kids ESL human body parts English song TPR children educational",
+  "Florida":"kids ESL Disney World Florida English song TPR children",
+  "San Francisco":"kids ESL Golden Gate Bridge ocean English song TPR children",
+  "Iowa":"kids ESL farm animals corn English song TPR children educational",
+  "New Orleans":"kids ESL jazz music New Orleans English song TPR children",
+  "Minnesota":"kids ESL forest lake nature English song TPR children educational",
+  "Vermont":"kids ESL maple syrup fall English song TPR children educational",
+  "Alaska":"kids ESL aurora Alaska polar bear English song TPR children",
+  "Washington DC":"kids ESL White House USA flag English song TPR children",
+  "Hollywood":"kids ESL Hollywood movie star English song TPR children",
+};
+
+async function fetchVids(city,pts){
+  if(CITY_VIDEO_DATA[city]){showVids(CITY_VIDEO_DATA[city]);return;}
+  const topic=CITY_VIDEO_TOPICS[city]||city+' for kids educational English';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,
+        messages:[{role:'user',content:'Find 4 real YouTube videos for kids ESL English class age 4-7. Topic: "'+topic+'". Return ONLY JSON array no markdown: [{"title":"...","channel":"...","videoId":"11charID","duration":"3:00","views":"1M"}]'}]})
+    });
+    const d=await r.json();
+    const txt=(d.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
+    let vids=[];try{vids=JSON.parse(txt);}catch(e){}
+    showVids(vids.length?vids:fallback(city));
+  }catch(e){showVids(fallback(city));}
+}
+function fallback(city){
+  return CITY_VIDEO_DATA[city]||[
+    {title:"Songs for Kids: "+city,channel:"Super Simple Songs",url:"https://www.youtube.com/results?search_query="+encodeURIComponent("kids ESL English song "+city)+"&sp=CAMSAhAB",duration:"3:00",views:"1M+"},
+    {title:"Learn About: "+city,channel:"National Geographic Kids",url:"https://www.youtube.com/results?search_query="+encodeURIComponent("children English educational "+city)+"&sp=CAMSAhAB",duration:"4:00",views:"2M+"},
+    {title:"Blippi Explores "+city,channel:"Blippi",url:"https://www.youtube.com/results?search_query="+encodeURIComponent("Blippi "+city+" kids educational English")+"&sp=CAMSAhAB",duration:"8:00",views:"5M+"},
+    {title:city+" for Children",channel:"CoComelon",url:"https://www.youtube.com/results?search_query="+encodeURIComponent(city+" kids ESL song English")+"&sp=CAMSAhAB",duration:"2:00",views:"50M+"},
+  ];
+}
+
+/* ── REVIEW ── */
+function startReview(cityIdx,rType){
+  curCity=cityIdx;curRevType=rType;
+  const l=LESSONS[cityIdx];
+  session={qs:[],qi:0,wrong:[],placed:[],flipped:[],matched:0,total:0,canFlip:true,spIdx:0,revStep:0,isReview:true,hintShown:false};
+  setupGameHud(l,{name:rType==='r1'?'2주차 리뷰':'4주차 종합 리뷰',emoji:rType==='r1'?'🔁':'🏆'});
+  showScreen('gameScreen');
+  renderRevStep();
+}
+
+function renderRevStep(){
+  const l=LESSONS[curCity],step=session.revStep;
+  if(curRevType==='r1'){
+    // r1: fill(M2) + listen(M4)
+    if(step===0){session.qs=[...l.missions[1].qs];session.qi=0;fillLocked=false;renderFillQ();}
+    else if(step===1){session.qs=[...l.missions[3].words];session.qi=0;listenLocked=false;renderListenQ();}
+    else finishReview();
+  }else{
+    // r2: ox(M3) + build(M5)
+    if(step===0){session.qs=[...l.missions[2].qs];session.qi=0;oxLocked=false;renderOXQ();}
+    else if(step===1){session.qs=[...l.missions[4].qs.slice(0,2)];session.qi=0;session.placed=[];renderBuildQ();}
+    else finishReview();
+  }
+}
+
+function revAdvance(){session.revStep++;renderRevStep();}
+function finishReview(){
+  const xp=curRevType==='r1'?40:50;
+  const c=ST.cities[curCity],oldLv=ST.lv;
+  if(curRevType==='r1')c.r1=true;else c.r2=true;
+  ST.xp+=xp;ST.lv=getLv(ST.xp);save();refreshHUD();
+  showResult({emoji:'🔁',title:(curRevType==='r1'?'2주차':'4주차')+'리뷰 완료!',sub:'이달 학습을 잘 복습했어요! 👏',xp,lvUp:ST.lv>oldLv,isReview:true});
+}
+
+
+
+/* ═══════════ INIT ═══════════ */
+LESSONS.forEach((_,i)=>{
+  if(!ST.cities[i])ST.cities[i]={cleared:[],retry:{},r1:false,r2:false};
+  if(!ST.cities[i].retry)ST.cities[i].retry={};
+  if(ST.cities[i].r1===undefined)ST.cities[i].r1=false;
+  if(ST.cities[i].r2===undefined)ST.cities[i].r2=false;
+});
+ST.lv=getLv(ST.xp);save();
+renderHome();
+</script>
+</body>
+</html>
