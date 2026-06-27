@@ -1059,26 +1059,104 @@ function xpPct(lv,xp){
 }
 
 /* ═══════════ SPEECH ═══════════ */
-function speak(text,rate=0.78,pitch=1.0){
+// ── 음성 준비 (앱 시작 시 한 번만 호출) ──
+let __voices=[], __voiceReady=false;
+function __loadVoices(){
+  __voices=speechSynthesis.getVoices();
+  __voiceReady=__voices.length>0;
+}
+if(window.speechSynthesis){
+  __loadVoices();
+  speechSynthesis.onvoiceschanged=__loadVoices;
+}
+
+// ── 최적 미국 원어민 음성 선택 ──
+// 우선순위: Samantha(iOS 최고급) → Aria/Ryan(Windows Neural) → 
+//           Alex(macOS) → 고품질 en-US local → 일반 en-US
+function __getBestVoice(){
+  if(!__voiceReady) __loadVoices();
+  const v=__voices;
+  return (
+    // iOS: Samantha = 최고급 미국 여성
+    v.find(x=>/samantha/i.test(x.name)&&x.lang==='en-US') ||
+    // iOS enhanced voices
+    v.find(x=>/samantha/i.test(x.name)) ||
+    // macOS: Ava (neural, 매우 자연스러움)
+    v.find(x=>/^ava$/i.test(x.name)&&x.lang==='en-US') ||
+    // macOS: Allison
+    v.find(x=>/^allison$/i.test(x.name)&&x.lang==='en-US') ||
+    // macOS/iOS: Joelle, Monica (미국식)
+    v.find(x=>/joelle|monica/i.test(x.name)&&x.lang==='en-US') ||
+    // Windows: Aria Neural (최고급)
+    v.find(x=>/aria/i.test(x.name)&&x.lang==='en-US') ||
+    // Windows: Jenny Neural
+    v.find(x=>/jenny/i.test(x.name)&&x.lang==='en-US') ||
+    // macOS: Alex (남성이지만 매우 자연스러움)
+    v.find(x=>/^alex$/i.test(x.name)) ||
+    // Android: 고품질 en-US
+    v.find(x=>x.lang==='en-US'&&x.localService&&x.name.includes('US')) ||
+    // 로컬 설치된 en-US (online보다 자연스러움)
+    v.find(x=>x.lang==='en-US'&&x.localService) ||
+    v.find(x=>x.lang==='en-US') ||
+    v.find(x=>x.lang.startsWith('en'))
+  );
+}
+
+// ── 메인 speak 함수 ──
+// rate: 속도 (0.75 = 천천히 명확하게, 1.0 = 보통)
+// pitch: 음높이 (1.0 = 자연스러운 원어민)
+function speak(text, rate=0.82, pitch=1.0){
   return new Promise(res=>{
     if(!window.speechSynthesis){res();return;}
+
+    // 이전 발음 즉시 중단
     speechSynthesis.cancel();
-    text=String(text).replace(/\.$/,'').trim();
-    const u=new SpeechSynthesisUtterance(text);
-    u.rate=rate;u.pitch=pitch;u.volume=1;u.lang='en-US';
-    const vv=speechSynthesis.getVoices();
-    const pref=vv.find(v=>/samantha/i.test(v.name))
-              ||vv.find(v=>/karen|moira|allison|ava/i.test(v.name))
-              ||vv.find(v=>v.lang==='en-US'&&v.localService)
-              ||vv.find(v=>v.lang==='en-US')
-              ||vv.find(v=>v.lang.startsWith('en'));
-    if(pref)u.voice=pref;
-    u.onend=res;u.onerror=res;
-    speechSynthesis.speak(u);
+
+    // 텍스트 전처리 - TTS가 자연스럽게 읽도록
+    text = String(text)
+      .replace(/\bUSA\b/g, 'U S A')           // USA → U S A (각각 읽기)
+      .replace(/\bNYC\b/g, 'New York City')
+      .replace(/\bD\.C\.\b/g, 'D C')
+      .replace(/\bS\.F\.\b/g, 'San Francisco')
+      .replace(/\.$/g, '')                      // 문장 끝 마침표 제거 (dot 방지)
+      .trim();
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang    = 'en-US';
+    u.rate    = rate;
+    u.pitch   = pitch;
+    u.volume  = 1.0;
+
+    // 최적 음성 적용
+    const best = __getBestVoice();
+    if(best) u.voice = best;
+
+    u.onend  = res;
+    u.onerror= ()=>{
+      // 오류 시 기본 음성으로 재시도
+      const fallback = new SpeechSynthesisUtterance(text);
+      fallback.lang='en-US'; fallback.rate=rate; fallback.pitch=pitch;
+      fallback.onend=res; fallback.onerror=res;
+      speechSynthesis.speak(fallback);
+    };
+
+    // iOS Safari 버그 우회: 짧은 딜레이 후 재생
+    setTimeout(()=>{
+      if(speechSynthesis.speaking) speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }, 50);
   });
 }
-function speakNatural(text){ return speak(text, 0.72, 1.0); }
-function speakChant(text){ return speak(text, 0.80, 1.05); }
+
+// ── 유형별 speak 헬퍼 ──
+// 원어민 읽기: 느리고 명확 (아이들용)
+function speakNatural(text){ return speak(text, 0.75, 1.0); }
+
+// 챈트: 리드미컬하고 약간 밝게
+function speakChant(text){ return speak(text, 0.82, 1.05); }
+
+// 단어 강조: 매우 느리고 또렷하게
+function speakWord(text){ return speak(text, 0.68, 1.0); }
 
 if(window.speechSynthesis){
   speechSynthesis.getVoices();
@@ -1692,12 +1770,12 @@ function playListenWord(){
   const q=session.qs[session.qi];
   const btn=document.getElementById('speakerBtn');
   if(btn){btn.classList.add('playing');setTimeout(()=>{if(btn)btn.classList.remove('playing');},900);}
-  speak(q.w,.8,1.12);
+  speakWord(q.w);
 }
 function checkListen(ok,emoji,word,el){
   if(listenLocked)return;listenLocked=true;
   if(ok){
-    beep('ok');el.classList.add('correct');showFb(true);speak(word,.82);
+    beep('ok');el.classList.add('correct');showFb(true);speakWord(word);
     setTimeout(()=>{listenLocked=false;session.qi++;updProg();
       if(session.qi>=session.qs.length)missionDone();else{listenLocked=false;renderListenQ();}},950);
   }else{
@@ -1773,7 +1851,7 @@ function checkBuild(){
   const ok=JSON.stringify(placed)===JSON.stringify(session.bAns);
   const msg=document.getElementById('buildMsg');
   if(ok){
-    beep('ok');showFb(true);speak(session.bAns.join(' '),.78);rainStars();
+    beep('ok');showFb(true);speakNatural(session.bAns.join(' '));rainStars();
     if(msg)msg.textContent='';
     setTimeout(()=>{session.qi++;updProg();
       if(session.qi>=session.qs.length)missionDone();else{session.placed=[];renderBuildQ();}},1100);
@@ -1884,7 +1962,7 @@ function playNative(){
   const s=m.sents[session.spIdx];
   const btn=document.getElementById('nativeBtn');
   if(btn){btn.classList.add('playing');setTimeout(()=>{if(btn)btn.classList.remove('playing');},900);}
-  speak(s.en,.8,1.08);
+  speakNatural(s.en);
 }
 function spSubmit(){
   session.spIdx++;
