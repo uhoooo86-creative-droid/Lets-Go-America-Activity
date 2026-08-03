@@ -331,6 +331,64 @@ button{font-family:'Baloo 2','Nunito',sans-serif;}
 .mp-done{
   box-shadow:0 4px 0 rgba(0,0,0,.2),inset 0 2px 0 rgba(255,255,255,.3),0 0 0 3px rgba(255,215,0,.6) !important;
 }
+
+/* ═══════════ VOICE PICKER ═══════════ */
+.voice-bar{
+  margin:0 16px 20px;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-radius:var(--rXL);
+  padding:14px 16px;
+  box-shadow:0 6px 0 rgba(0,0,0,.08),var(--shC);
+  border:2px solid rgba(255,255,255,.85);
+}
+.voice-bar-title{
+  font-size:.8rem;font-weight:900;color:var(--sub);
+  letter-spacing:.05em;text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.voice-scroll{
+  display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.voice-scroll::-webkit-scrollbar{display:none;}
+.voice-chip{
+  flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:10px 14px;border-radius:var(--rL);
+  border:2.5px solid rgba(200,190,170,.3);
+  background:rgba(255,255,255,.7);
+  cursor:pointer;transition:transform .12s,border-color .15s,background .15s;
+  min-width:72px;
+}
+.voice-chip:active{transform:scale(.94);}
+.voice-chip.selected{
+  background:linear-gradient(135deg,var(--ora),var(--ora2));
+  border-color:rgba(255,255,255,.6);
+  box-shadow:0 4px 0 rgba(160,70,0,.25),0 6px 16px rgba(255,149,0,.2);
+}
+.voice-chip-icon{font-size:1.6rem;line-height:1;}
+.voice-chip-name{
+  font-size:.65rem;font-weight:900;color:var(--ink);
+  white-space:nowrap;text-align:center;
+}
+.voice-chip.selected .voice-chip-name{color:#fff;}
+.voice-chip-tag{
+  font-size:.55rem;font-weight:700;
+  color:var(--sub);
+  background:rgba(0,0,0,.07);
+  padding:1px 5px;border-radius:99px;
+  white-space:nowrap;
+}
+.voice-chip.selected .voice-chip-tag{color:rgba(255,255,255,.8);background:rgba(255,255,255,.2);}
+.voice-test-btn{
+  margin-top:10px;width:100%;padding:10px;
+  border-radius:var(--rL);border:none;
+  background:rgba(0,0,0,.06);
+  font-family:'Baloo 2',sans-serif;font-size:.82rem;font-weight:900;
+  color:var(--sub);cursor:pointer;transition:background .15s;
+}
+.voice-test-btn:active{background:rgba(0,0,0,.1);}
 </style>
 </head>
 <body>
@@ -560,6 +618,18 @@ button{font-family:'Baloo 2','Nunito',sans-serif;}
     </div>
     <div class="cc-arr">›</div>
   </button>
+
+  <!-- ── Voice Picker ── -->
+  <div class="voice-bar" id="voiceBar">
+    <div class="voice-bar-title">🎙️ Choose a Voice</div>
+    <div class="voice-scroll" id="voiceScroll">
+      <!-- populated by JS -->
+    </div>
+    <button class="voice-test-btn" id="voiceTestBtn" onclick="testVoice()">
+      🔊 Test: &ldquo;Hello! I love New York!&rdquo;
+    </button>
+  </div>
+
 </div></div>
 
 <!-- STAGE -->
@@ -1060,199 +1130,36 @@ function xpPct(lv,xp){
 
 /* ═══════════ SPEECH ═══════════ */
 // ── 음성 준비 (앱 시작 시 한 번만 호출) ──
-let __voices=[], __voiceReady=false;
+// ── TTS 음성 시스템 ──
+let __voices = [];
 function __loadVoices(){
-  __voices=speechSynthesis.getVoices();
-  __voiceReady=__voices.length>0;
+  const vv = speechSynthesis.getVoices();
+  if(vv.length > 0) __voices = vv;
 }
 if(window.speechSynthesis){
   __loadVoices();
-  speechSynthesis.onvoiceschanged=__loadVoices;
+  speechSynthesis.onvoiceschanged = __loadVoices;
 }
 
-// ── 최적 미국 원어민 음성 선택 ──
-// 우선순위: Samantha(iOS 최고급) → Aria/Ryan(Windows Neural) → 
-//           Alex(macOS) → 고품질 en-US local → 일반 en-US
 function __getBestVoice(){
-  if(!__voiceReady) __loadVoices();
-  const v=__voices;
+  __loadVoices();
+  const v = __voices;
+  if(!v.length) return null;
   return (
-    // iOS: Samantha = 최고급 미국 여성
-    v.find(x=>/samantha/i.test(x.name)&&x.lang==='en-US') ||
-    // iOS enhanced voices
-    v.find(x=>/samantha/i.test(x.name)) ||
-    // macOS: Ava (neural, 매우 자연스러움)
-    v.find(x=>/^ava$/i.test(x.name)&&x.lang==='en-US') ||
-    // macOS: Allison
-    v.find(x=>/^allison$/i.test(x.name)&&x.lang==='en-US') ||
-    // macOS/iOS: Joelle, Monica (미국식)
-    v.find(x=>/joelle|monica/i.test(x.name)&&x.lang==='en-US') ||
-    // Windows: Aria Neural (최고급)
-    v.find(x=>/aria/i.test(x.name)&&x.lang==='en-US') ||
-    // Windows: Jenny Neural
-    v.find(x=>/jenny/i.test(x.name)&&x.lang==='en-US') ||
-    // macOS: Alex (남성이지만 매우 자연스러움)
-    v.find(x=>/^alex$/i.test(x.name)) ||
-    // Android: 고품질 en-US
-    v.find(x=>x.lang==='en-US'&&x.localService&&x.name.includes('US')) ||
-    // 로컬 설치된 en-US (online보다 자연스러움)
-    v.find(x=>x.lang==='en-US'&&x.localService) ||
-    v.find(x=>x.lang==='en-US') ||
-    v.find(x=>x.lang.startsWith('en'))
+    v.find(x => /samantha/i.test(x.name)) ||
+    v.find(x => /ava|allison|joelle|monica/i.test(x.name) && x.lang === 'en-US') ||
+    v.find(x => /aria|jenny|guy/i.test(x.name) && x.lang === 'en-US') ||
+    v.find(x => /alex/i.test(x.name)) ||
+    v.find(x => x.lang === 'en-US' && x.localService) ||
+    v.find(x => x.lang === 'en-US') ||
+    v.find(x => x.lang.startsWith('en-')) ||
+    null
   );
 }
 
-// ── 메인 speak 함수 ──
-// rate: 속도 (0.75 = 천천히 명확하게, 1.0 = 보통)
-// pitch: 음높이 (1.0 = 자연스러운 원어민)
-function speak(text, rate=0.82, pitch=1.0){
-  return new Promise(res=>{
-    if(!window.speechSynthesis){res();return;}
+// iOS/Android 완벽 호환 speak
+let __speakTimer = null;
 
-    // 이전 발음 즉시 중단
-    speechSynthesis.cancel();
-
-    // 텍스트 전처리 - TTS가 자연스럽게 읽도록
-    text = String(text)
-      .replace(/\bUSA\b/g, 'U S A')           // USA → U S A (각각 읽기)
-      .replace(/\bNYC\b/g, 'New York City')
-      .replace(/\bD\.C\.\b/g, 'D C')
-      .replace(/\bS\.F\.\b/g, 'San Francisco')
-      .replace(/\.$/g, '')                      // 문장 끝 마침표 제거 (dot 방지)
-      .trim();
-
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang    = 'en-US';
-    u.rate    = rate;
-    u.pitch   = pitch;
-    u.volume  = 1.0;
-
-    // 최적 음성 적용
-    const best = __getBestVoice();
-    if(best) u.voice = best;
-
-    u.onend  = res;
-    u.onerror= ()=>{
-      // 오류 시 기본 음성으로 재시도
-      const fallback = new SpeechSynthesisUtterance(text);
-      fallback.lang='en-US'; fallback.rate=rate; fallback.pitch=pitch;
-      fallback.onend=res; fallback.onerror=res;
-      speechSynthesis.speak(fallback);
-    };
-
-    // iOS Safari 버그 우회: 짧은 딜레이 후 재생
-    setTimeout(()=>{
-      if(speechSynthesis.speaking) speechSynthesis.cancel();
-      speechSynthesis.speak(u);
-    }, 50);
-  });
-}
-
-// ── 유형별 speak 헬퍼 ──
-// 원어민 읽기: 느리고 명확 (아이들용)
-function speakNatural(text){ return speak(text, 0.75, 1.0); }
-
-// 챈트: 리드미컬하고 약간 밝게
-function speakChant(text){ return speak(text, 0.82, 1.05); }
-
-// 단어 강조: 매우 느리고 또렷하게
-function speakWord(text){ return speak(text, 0.68, 1.0); }
-
-if(window.speechSynthesis){
-  speechSynthesis.getVoices();
-  if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
-}
-
-/* ═══════════ BEEP ═══════════ */
-function beep(t){
-  try{
-    const a=new(window.AudioContext||window.webkitAudioContext)();
-    const o=a.createOscillator(),g=a.createGain();
-    o.connect(g);g.connect(a.destination);
-    if(t==='ok'){o.type='sine';o.frequency.setValueAtTime(523,a.currentTime);o.frequency.setValueAtTime(784,a.currentTime+.1);g.gain.setValueAtTime(.25,a.currentTime);}
-    else if(t==='match'){[523,659,784].forEach((f,i)=>{const o2=a.createOscillator(),g2=a.createGain();o2.connect(g2);g2.connect(a.destination);o2.frequency.value=f;g2.gain.setValueAtTime(.22,a.currentTime+i*.12);g2.gain.exponentialRampToValueAtTime(.001,a.currentTime+i*.12+.3);o2.start(a.currentTime+i*.12);o2.stop(a.currentTime+i*.12+.3);});return;}
-    else if(t==='wrong'){o.type='sawtooth';o.frequency.setValueAtTime(280,a.currentTime);o.frequency.setValueAtTime(160,a.currentTime+.15);g.gain.setValueAtTime(.18,a.currentTime);}
-    else{o.frequency.value=660;g.gain.setValueAtTime(.18,a.currentTime);}
-    g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.45);
-    o.start();o.stop(a.currentTime+.45);
-  }catch(e){}
-}
-
-/* ═══════════ TOAST ═══════════ */
-function toast(msg,emoji='✨'){
-  const el=document.getElementById('toast');
-  el.textContent=(emoji?emoji+' ':'')+msg;
-  el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),1800);
-}
-
-/* ═══════════ FEEDBACK ═══════════ */
-let fbTimer=null;
-function showFb(ok,msg=''){
-  clearTimeout(fbTimer);
-  const ov=document.getElementById('fbOverlay');
-  document.getElementById('fbEmoji').textContent=ok?'⭐':'💪';
-  document.getElementById('fbText').textContent=ok?(msg||'잘했어요! 🎉'):(msg||'다시 해봐요!');
-  ov.classList.add('show');
-  fbTimer=setTimeout(()=>ov.classList.remove('show'),900);
-}
-
-/* ═══════════ STARS ═══════════ */
-function rainStars(){
-  const c=document.getElementById('starRain');
-  ['⭐','🌟','✨','💫','🎉'].forEach((s,i)=>{
-    const d=document.createElement('div');
-    d.className='star-particle';
-    d.textContent=s;
-    d.style.left=Math.random()*100+'%';
-    d.style.animationDelay=i*.15+'s';
-    c.appendChild(d);
-    setTimeout(()=>d.remove(),1400);
-  });
-}
-
-/* ═══════════ SCREEN ═══════════ */
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.getElementById(id).scrollTop=0;
-}
-
-/* ═══════════ HUD ═══════════ */
-function refreshHUD(){
-  const lv=ST.lv,xp=ST.xp,pct=xpPct(lv,xp);
-  document.getElementById('heroXpFill').style.width=pct+'%';
-  document.getElementById('heroXpTxt').textContent=xp+' XP';
-  document.getElementById('playerLv').textContent='Lv.'+lv;
-  document.getElementById('hudXp').textContent=xp+' XP';
-  document.getElementById('gameHudXp').textContent=xp;
-}
-
-/* ═══════════ HOME ═══════════ */
-function renderHome(){
-  buildMapPins();
-  // continue card
-  let bestIdx=0,bestP=0;
-  LESSONS.forEach((_,i)=>{
-    const c=ST.cities[i];
-    const p=c.cleared.length+(c.r1?1:0)+(c.r2?1:0);
-    if(p>bestP){bestP=p;bestIdx=i;}
-  });
-  const bl=LESSONS[bestIdx],bc=ST.cities[bestIdx];
-  const bp=bc.cleared.length+(bc.r1?1:0)+(bc.r2?1:0);
-  document.getElementById('continueEmoji').textContent=bl.emoji;
-  document.getElementById('continueCity').textContent=bl.city+' 이어하기';
-  document.getElementById('continueDesc').textContent=bp+'/11 완료 · '+bl.missions[Math.min(bp,8)].name;
-  document.getElementById('continueCard').onclick=()=>openCity(bestIdx);
-  refreshHUD();
-}
-
-function goContinue(){document.getElementById('continueCard').click();}
-function goHome(){showScreen('homeScreen');renderHome();}
-function exitGame(){openCity(curCity);}
-
-/* ═══════════ MAP PINS ═══════════ */
-let tipTimer=null;
 
 async function recTog(){
   const btn=document.getElementById('recBtn');
@@ -1376,6 +1283,104 @@ function retryMC(){
   if(m&&m.steps) m.steps.forEach((_,i)=>{const el=document.getElementById('mcstep'+i);if(el){el.style.opacity='1';el.style.border='';}});
   setTimeout(()=>mcListenAll(),200);
 }
+
+function refreshHUD(){
+  const lv=ST.lv,xp=ST.xp,pct=xpPct(lv,xp);
+  document.getElementById('heroXpFill').style.width=pct+'%';
+  document.getElementById('heroXpTxt').textContent=xp+' XP';
+  document.getElementById('playerLv').textContent='Lv.'+lv;
+  document.getElementById('hudXp').textContent=xp+' XP';
+  document.getElementById('gameHudXp').textContent=xp;
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById(id).scrollTop=0;
+}
+
+function rainStars(){
+  const c=document.getElementById('starRain');
+  ['⭐','🌟','✨','💫','🎉'].forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='star-particle';
+    d.textContent=s;
+    d.style.left=Math.random()*100+'%';
+    d.style.animationDelay=i*.15+'s';
+    c.appendChild(d);
+    setTimeout(()=>d.remove(),1400);
+  });
+}
+
+function toast(msg,emoji='✨'){
+  const el=document.getElementById('toast');
+  el.textContent=(emoji?emoji+' ':'')+msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),1800);
+}
+
+function showFb(ok,msg=''){
+  clearTimeout(fbTimer);
+  const ov=document.getElementById('fbOverlay');
+  document.getElementById('fbEmoji').textContent=ok?'⭐':'💪';
+  document.getElementById('fbText').textContent=ok?(msg||'잘했어요! 🎉'):(msg||'다시 해봐요!');
+  ov.classList.add('show');
+  fbTimer=setTimeout(()=>ov.classList.remove('show'),900);
+}
+
+function beep(t){
+  try{
+    const a=new(window.AudioContext||window.webkitAudioContext)();
+    const o=a.createOscillator(),g=a.createGain();
+    o.connect(g);g.connect(a.destination);
+    if(t==='ok'){o.type='sine';o.frequency.setValueAtTime(523,a.currentTime);o.frequency.setValueAtTime(784,a.currentTime+.1);g.gain.setValueAtTime(.25,a.currentTime);}
+    else if(t==='match'){[523,659,784].forEach((f,i)=>{const o2=a.createOscillator(),g2=a.createGain();o2.connect(g2);g2.connect(a.destination);o2.frequency.value=f;g2.gain.setValueAtTime(.22,a.currentTime+i*.12);g2.gain.exponentialRampToValueAtTime(.001,a.currentTime+i*.12+.3);o2.start(a.currentTime+i*.12);o2.stop(a.currentTime+i*.12+.3);});return;}
+    else if(t==='wrong'){o.type='sawtooth';o.frequency.setValueAtTime(280,a.currentTime);o.frequency.setValueAtTime(160,a.currentTime+.15);g.gain.setValueAtTime(.18,a.currentTime);}
+    else{o.frequency.value=660;g.gain.setValueAtTime(.18,a.currentTime);}
+    g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.45);
+    o.start();o.stop(a.currentTime+.45);
+  }catch(e){}
+}
+
+
+function renderHome(){
+  buildMapPins();
+  // continue card
+  let bestIdx=0,bestP=0;
+  LESSONS.forEach((_,i)=>{
+    const c=ST.cities[i];
+    const p=c.cleared.length+(c.r1?1:0)+(c.r2?1:0);
+    if(p>bestP){bestP=p;bestIdx=i;}
+  });
+  const bl=LESSONS[bestIdx],bc=ST.cities[bestIdx];
+  const bp=bc.cleared.length+(bc.r1?1:0)+(bc.r2?1:0);
+  document.getElementById('continueEmoji').textContent=bl.emoji;
+  document.getElementById('continueCity').textContent=bl.city+' 이어하기';
+  document.getElementById('continueDesc').textContent=bp+'/11 완료 · '+bl.missions[Math.min(bp,8)].name;
+  document.getElementById('continueCard').onclick=()=>openCity(bestIdx);
+  refreshHUD();
+  // Build voice picker after voices load
+  setTimeout(buildVoicePicker, 600);
+}
+
+
+function goHome(){
+  if(recMR&&recMR.state==='recording'){try{recMR.stop();}catch(e){}}
+  recMR=null;recChunks=[];
+  if(recStream){try{recStream.getTracks().forEach(t=>t.stop());}catch(e){}}
+  recStream=null;
+  showScreen('homeScreen');renderHome();
+}
+function exitGame(){
+  if(recMR&&recMR.state==='recording'){try{recMR.stop();}catch(e){}}
+  recMR=null;recChunks=[];
+  if(recStream){try{recStream.getTracks().forEach(t=>t.stop());}catch(e){}}
+  recStream=null;
+  openCity(curCity);
+}
+
+/* ═══════════ MAP PINS ═══════════ */
+let tipTimer=null;
 
 function buildMapPins(){
   // Update HTML city pin elements (not SVG createElementNS)
@@ -2312,6 +2317,140 @@ function finishReview(){
   showResult({emoji:'🔁',title:(curRevType==='r1'?'2주차':'4주차')+'리뷰 완료!',sub:'이달 학습을 잘 복습했어요! 👏',xp,lvUp:ST.lv>oldLv,isReview:true});
 }
 
+
+
+
+/* ══════════════════════════════════════════
+   VOICE PICKER
+══════════════════════════════════════════ */
+let __selectedVoice = null;  // null = auto (best available)
+
+// Voice 프리셋 정의 - 아이콘/이름/설명/필터
+const VOICE_PRESETS = [
+  { id:'auto',   icon:'✨', name:'Auto',     tag:'Best',     filter: null },
+  { id:'female', icon:'👩', name:'Woman',    tag:'Clear',    filter: v => /female|f/i.test(v.name) || /samantha|ava|allison|aria|jenny|joelle|monica|karen|victoria|zira|hazel|fiona/i.test(v.name) },
+  { id:'male',   icon:'👨', name:'Man',      tag:'Deep',     filter: v => /male|m/i.test(v.name) || /alex|guy|ryan|daniel|oliver|fred|junior|lincoln|thomas/i.test(v.name) },
+  { id:'slow',   icon:'🐢', name:'Slow',     tag:'x0.65',   filter: null, rate: 0.65 },
+  { id:'fast',   icon:'🚀', name:'Fast',     tag:'x1.0',    filter: null, rate: 1.0  },
+];
+
+// 사용자가 선택한 설정
+let __voicePreset = { id:'auto', rate:null, filter:null };
+
+function buildVoicePicker(){
+  const scroll = document.getElementById('voiceScroll');
+  if(!scroll) return;
+
+  __loadVoices();
+  const voices = __voices.filter(v => v.lang && v.lang.startsWith('en'));
+
+  scroll.innerHTML = '';
+
+  VOICE_PRESETS.forEach(preset => {
+    const chip = document.createElement('div');
+    chip.className = 'voice-chip' + (preset.id === __voicePreset.id ? ' selected' : '');
+    chip.innerHTML = `
+      <span class="voice-chip-icon">${preset.icon}</span>
+      <span class="voice-chip-name">${preset.name}</span>
+      <span class="voice-chip-tag">${preset.tag}</span>
+    `;
+    chip.addEventListener('click', () => selectVoicePreset(preset, chip));
+    scroll.appendChild(chip);
+  });
+
+  // 실제 사용 가능한 음성들 추가 (en-US 우선)
+  const shown = new Set();
+  const enUS = voices.filter(v => v.lang === 'en-US');
+  const enOther = voices.filter(v => v.lang !== 'en-US');
+
+  [...enUS, ...enOther].forEach(v => {
+    const shortName = v.name.replace(/ \(.*?\)/g,'').replace(/Microsoft /i,'').replace(/Apple /i,'').trim();
+    if(shown.has(shortName)) return;
+    shown.add(shortName);
+
+    const isFemale = /samantha|ava|allison|aria|jenny|joelle|monica|karen|victoria|zira|hazel|fiona/i.test(v.name);
+    const icon = isFemale ? '👩' : '👨';
+    const isUS = v.lang === 'en-US';
+    const tag = isUS ? '🇺🇸' : v.lang;
+
+    const chip = document.createElement('div');
+    chip.className = 'voice-chip' + (__voicePreset.id === 'voice_'+v.name ? ' selected' : '');
+    chip.innerHTML = `
+      <span class="voice-chip-icon">${icon}</span>
+      <span class="voice-chip-name">${shortName.slice(0,10)}</span>
+      <span class="voice-chip-tag">${tag}</span>
+    `;
+    chip.addEventListener('click', () => {
+      __voicePreset = { id: 'voice_'+v.name, rate: null, filter: null };
+      __selectedVoice = v;
+      document.querySelectorAll('.voice-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      testVoice();
+    });
+    scroll.appendChild(chip);
+  });
+}
+
+function selectVoicePreset(preset, clickedChip){
+  __voicePreset = { id: preset.id, rate: preset.rate || null, filter: preset.filter || null };
+  __selectedVoice = null;  // preset → auto-select by filter
+
+  document.querySelectorAll('.voice-chip').forEach(c => c.classList.remove('selected'));
+  clickedChip.classList.add('selected');
+
+  testVoice();
+}
+
+function testVoice(){
+  const btn = document.getElementById('voiceTestBtn');
+  if(btn){ btn.textContent = '🔊 Playing...'; }
+  speakWithPreset('Hello! I love New York! The taxi is yellow!', 0.82, 1.0).then(() => {
+    if(btn){ btn.textContent = '🔊 Test: "Hello! I love New York!"'; }
+  });
+}
+
+// preset을 반영한 speak
+function speakWithPreset(text, rate=0.82, pitch=1.0){
+  return new Promise(res => {
+    if(!window.speechSynthesis){ res(); return; }
+
+    text = String(text).replace(/USA/g,'U S A').replace(/\.$/g,'').trim();
+    if(!text){ res(); return; }
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang   = 'en-US';
+    u.rate   = __voicePreset.rate || rate;
+    u.pitch  = pitch;
+    u.volume = 1.0;
+
+    // 음성 결정
+    if(__selectedVoice){
+      u.voice = __selectedVoice;
+    } else if(__voicePreset.filter){
+      __loadVoices();
+      const filtered = __voices.filter(v => v.lang.startsWith('en') && __voicePreset.filter(v));
+      if(filtered.length) u.voice = filtered[0];
+    } else {
+      const best = __getBestVoice();
+      if(best) u.voice = best;
+    }
+
+    u.onend = res; u.onerror = res;
+    if(speechSynthesis.paused) speechSynthesis.resume();
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+
+    setTimeout(() => { if(speechSynthesis.paused) speechSynthesis.resume(); }, 200);
+  });
+}
+
+// 기존 speak → preset 반영
+function speak(text, rate=0.82, pitch=1.0){
+  return speakWithPreset(text, rate, pitch);
+}
+function speakNatural(text){ return speak(text, 0.75, 1.0); }
+function speakChant(text){   return speak(text, 0.82, 1.05); }
+function speakWord(text){    return speak(text, 0.70, 1.0); }
 
 
 /* ═══════════ INIT ═══════════ */
