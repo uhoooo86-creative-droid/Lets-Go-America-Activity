@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>🇺🇸 USA Travel English Adventure</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800;900&family=Nunito:wght@700;800;900&family=Jua&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
@@ -16,7 +16,7 @@
   --r:18px;--rL:26px;--rXL:34px;
   --sh:0 8px 0 rgba(0,0,0,.12);--shC:0 12px 28px rgba(0,0,0,.14);
 }
-html,body{height:100%;overflow:hidden;font-family:'Baloo 2','Nunito',sans-serif;color:var(--ink);}
+html,body{height:100%;overflow:hidden;font-family:'Baloo 2','Jua','Nunito','Jua',sans-serif;color:var(--ink);}
 
 /* SKY */
 .sky-bg{position:fixed;inset:0;z-index:-1;background:linear-gradient(170deg,var(--sky1) 0%,var(--sky2) 45%,var(--sky3) 100%);}
@@ -202,7 +202,7 @@ html,body{height:100%;overflow:hidden;font-family:'Baloo 2','Nunito',sans-serif;
 .speech-img,.chant-img,.mc-trophy{font-size:3.2rem;margin-bottom:10px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.12));}
 .eng{font-weight:900;font-size:1.25rem;color:var(--ora);letter-spacing:.02em;line-height:1.3;}
 .kor{font-size:.84rem;font-weight:700;color:var(--sub);margin-top:4px;}
-.native-btn{margin-top:12px;background:linear-gradient(135deg,#4FC3F7,#0288D1);border:none;border-radius:999px;padding:9px 20px;font-family:'Baloo 2',sans-serif;font-weight:900;font-size:.85rem;color:#fff;cursor:pointer;box-shadow:0 5px 0 rgba(1,80,160,.22);position:relative;overflow:hidden;transition:transform .12s;}
+.native-btn{margin-top:12px;background:linear-gradient(135deg,#4FC3F7,#0288D1);border:none;border-radius:999px;padding:9px 20px;font-family:'Baloo 2','Jua',sans-serif;font-weight:900;font-size:.85rem;color:#fff;cursor:pointer;box-shadow:0 5px 0 rgba(1,80,160,.22);position:relative;overflow:hidden;transition:transform .12s;}
 .native-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:rgba(255,255,255,.18);border-radius:999px;}
 .native-btn:active{transform:scale(.96);}
 .native-btn.playing{animation:sPlaying .5s ease infinite alternate;}
@@ -214,7 +214,7 @@ html,body{height:100%;overflow:hidden;font-family:'Baloo 2','Nunito',sans-serif;
 @keyframes recPulse{0%,100%{box-shadow:0 6px 0 rgba(150,18,18,.26),0 0 0 0 rgba(255,60,48,.38);}50%{box-shadow:0 6px 0 rgba(150,18,18,.26),0 0 0 14px rgba(255,60,48,0);}}
 .rec-lbl{font-weight:800;font-size:.8rem;color:var(--sub);text-align:center;}
 .rec-playback,.rec-playback-row{display:flex;align-items:center;gap:8px;width:100%;}
-.submit-btn{width:100%;padding:14px;border-radius:var(--rXL);border:none;background:linear-gradient(135deg,#34C759,#30D158);color:#fff;font-family:'Baloo 2',sans-serif;font-weight:900;font-size:.95rem;cursor:pointer;box-shadow:0 6px 0 rgba(0,120,40,.26);position:relative;overflow:hidden;transition:transform .12s;}
+.submit-btn{width:100%;padding:14px;border-radius:var(--rXL);border:none;background:linear-gradient(135deg,#34C759,#30D158);color:#fff;font-family:'Baloo 2','Jua',sans-serif;font-weight:900;font-size:.95rem;cursor:pointer;box-shadow:0 6px 0 rgba(0,120,40,.26);position:relative;overflow:hidden;transition:transform .12s;}
 .submit-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:rgba(255,255,255,.14);border-radius:var(--rXL) var(--rXL) 0 0;}
 .submit-btn:active{transform:translateY(3px);}
 .chant-card{text-align:left;}
@@ -222,7 +222,7 @@ html,body{height:100%;overflow:hidden;font-family:'Baloo 2','Nunito',sans-serif;
 .chant-line{font-weight:800;font-size:.92rem;color:var(--ink);padding:8px 12px;border-radius:var(--r);background:rgba(255,200,100,.1);}
 .chant-line.hl{background:linear-gradient(135deg,rgba(255,220,120,.28),rgba(255,180,60,.18));color:var(--ora);}
 .chant-listen-btns{display:flex;gap:9px;margin-bottom:10px;}
-.chant-listen-btn{flex:1;padding:11px;border-radius:var(--rXL);border:none;background:linear-gradient(135deg,var(--ora2),var(--gld));color:#fff;font-family:'Baloo 2',sans-serif;font-weight:900;font-size:.85rem;cursor:pointer;box-shadow:0 5px 0 rgba(170,110,0,.26);position:relative;overflow:hidden;transition:transform .12s;}
+.chant-listen-btn{flex:1;padding:11px;border-radius:var(--rXL);border:none;background:linear-gradient(135deg,var(--ora2),var(--gld));color:#fff;font-family:'Baloo 2','Jua',sans-serif;font-weight:900;font-size:.85rem;cursor:pointer;box-shadow:0 5px 0 rgba(170,110,0,.26);position:relative;overflow:hidden;transition:transform .12s;}
 .chant-listen-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:rgba(255,255,255,.18);border-radius:var(--rXL) var(--rXL) 0 0;}
 .chant-listen-btn:active{transform:scale(.96);}
 .chant-listen-btn.playing{animation:sPlaying .5s ease infinite alternate;}
@@ -259,13 +259,13 @@ html,body{height:100%;overflow:hidden;font-family:'Baloo 2','Nunito',sans-serif;
 .lvup-trophy{font-size:3.8rem;margin-bottom:10px;display:block;}
 .lvup-title{font-size:1.55rem;font-weight:900;color:var(--ora);}
 .lvup-sub{font-size:.88rem;font-weight:700;color:var(--sub);margin-top:5px;}
-.lvup-close{margin-top:18px;padding:12px 32px;border-radius:999px;background:linear-gradient(135deg,var(--ora),var(--ora2));color:#fff;border:none;font-family:'Baloo 2',sans-serif;font-size:.92rem;font-weight:900;cursor:pointer;box-shadow:0 5px 0 rgba(150,65,0,.26);}
+.lvup-close{margin-top:18px;padding:12px 32px;border-radius:999px;background:linear-gradient(135deg,var(--ora),var(--ora2));color:#fff;border:none;font-family:'Baloo 2','Jua',sans-serif;font-size:.92rem;font-weight:900;cursor:pointer;box-shadow:0 5px 0 rgba(150,65,0,.26);}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(28,28,30,.9);color:#fff;border-radius:999px;padding:10px 22px;font-weight:900;font-size:.85rem;z-index:300;transition:transform .3s ease;white-space:nowrap;box-shadow:var(--shC);backdrop-filter:blur(8px);}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .star-rain{position:fixed;inset:0;z-index:150;pointer-events:none;}
 .star-particle{position:absolute;font-size:1.7rem;animation:starFall .9s ease-out forwards;}
 @keyframes starFall{0%{opacity:1;transform:translateY(-20px) rotate(0deg) scale(0);}50%{opacity:1;transform:translateY(36px) rotate(180deg) scale(1.2);}100%{opacity:0;transform:translateY(90px) rotate(360deg) scale(.4);}}
-button{font-family:'Baloo 2','Nunito',sans-serif;}
+button{font-family:'Baloo 2','Jua','Nunito','Jua',sans-serif;}
 
 /* ═══════════ 3D MAP ═══════════ */
 .map-3d-wrap{position:relative;width:100%;user-select:none;}
@@ -310,7 +310,7 @@ button{font-family:'Baloo 2','Nunito',sans-serif;}
 
 .mp-label{
   background:rgba(50,60,90,.75);
-  color:#fff;font-family:'Baloo 2',sans-serif;
+  color:#fff;font-family:'Baloo 2','Jua',sans-serif;
   font-size:8.5px;font-weight:900;
   padding:2px 7px;border-radius:99px;
   white-space:nowrap;letter-spacing:.3px;
@@ -385,7 +385,7 @@ button{font-family:'Baloo 2','Nunito',sans-serif;}
   margin-top:10px;width:100%;padding:10px;
   border-radius:var(--rL);border:none;
   background:rgba(0,0,0,.06);
-  font-family:'Baloo 2',sans-serif;font-size:.82rem;font-weight:900;
+  font-family:'Baloo 2','Jua',sans-serif;font-size:.82rem;font-weight:900;
   color:var(--sub);cursor:pointer;transition:background .15s;
 }
 .voice-test-btn:active{background:rgba(0,0,0,.1);}
@@ -412,12 +412,12 @@ button{font-family:'Baloo 2','Nunito',sans-serif;}
 .city-tile{display:flex;align-items:center;gap:9px;min-width:0;min-height:60px;border:1px solid rgba(255,255,255,.86);border-radius:16px;padding:8px 11px;text-align:left;background:rgba(255,252,246,.95);box-shadow:0 3px 0 rgba(9,41,70,.2);cursor:pointer;color:#173653;font-family:inherit}
 .city-tile:focus-visible{outline:3px solid #ffca63;outline-offset:2px}
 .city-tile:active{transform:translateY(2px)}
-.city-no{flex:none;display:grid;place-items:center;width:31px;height:31px;border-radius:10px;background:#163f66;color:#fff;font:900 .83rem 'Nunito',sans-serif}
+.city-no{flex:none;display:grid;place-items:center;width:31px;height:31px;border-radius:10px;background:#163f66;color:#fff;font:900 .83rem 'Nunito','Jua',sans-serif}
 .city-tile.is-current .city-no{background:#dd743d}.city-tile.is-done .city-no{background:#208c70}
 .city-symbol{font-size:1.35rem;line-height:1;flex:none}
 .city-copy{min-width:0;display:flex;flex-direction:column}
 .city-en{font-size:.78rem;font-weight:900;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.city-ko{font-family:'Nunito',sans-serif;font-size:.66rem;color:#64788a;line-height:1.25}
+.city-ko{font-family:'Nunito','Jua',sans-serif;font-size:.66rem;color:#64788a;line-height:1.25}
 .legend{gap:16px;margin:9px 0 0}.leg{font-size:.7rem}
 .continue-card,.voice-bar{width:100%;margin:15px 0 0}
 .continue-card{padding:12px 15px;border-radius:20px}.cc-emoji{font-size:1.8rem}
@@ -425,6 +425,10 @@ button{font-family:'Baloo 2','Nunito',sans-serif;}
 @media(max-width:700px){.city-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.city-tile{min-height:55px;padding:6px;gap:5px}.city-symbol{font-size:1.07rem}.city-no{width:26px;height:26px;font-size:.7rem;border-radius:8px}.city-en{font-size:.64rem}.city-ko{font-size:.6rem}.home-shell{padding:12px 10px}.map-box{border-radius:14px}.brand-mark{padding:6px;font-size:.6rem}.city-grid-title small{display:none}}
 @media(max-width:380px){.city-symbol{display:none}.city-tile{gap:5px}}
 
+
+/* kid-friendly font + missing theme tokens */
+:root{--card-shadow:0 8px 22px rgba(0,40,90,.14);--r-lg:20px;--r-xl:26px;--sun:#FFC83D;--peach:#FF9A5A;--coral:#FF6B6B;--lavender:#9B7BFF;--red1:#FF4D4F;}
+body,button,input,select,textarea{font-family:'Baloo 2','Jua','Nunito',sans-serif;}
 </style>
 </head>
 <body>
@@ -1064,7 +1068,7 @@ function renderFlip(){
 
   document.getElementById('gameBody').innerHTML=`
     <div style="text-align:center;margin-bottom:8px;">
-      <span style="font-family:'Baloo 2',cursive;font-size:.9rem;color:var(--muted);">
+      <span style="font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;color:var(--muted);">
         🃏 짝을 찾아요! · <span id="flipCount">0</span>/${m.pairs.length} 쌍
       </span>
     </div>
@@ -1079,7 +1083,7 @@ function renderFlip(){
       <div class="flip-back" id="fb_${c.id}">
         ${c.side==='emoji'
           ?`<div class="flip-back-emoji">${c.e}</div><div class="flip-back-word">${c.w}</div>`
-          :`<div class="flip-back-word" style="font-size:1rem;font-family:'Baloo 2',cursive;color:var(--text);text-align:center;padding:4px;">${c.w}</div>`}
+          :`<div class="flip-back-word" style="font-size:1rem;font-family:'Baloo 2','Jua',sans-serif;color:var(--text);text-align:center;padding:4px;">${c.w}</div>`}
       </div>
     </div>`;
     el.onclick=()=>flipTap(c.id,c.pair,c.side,c.w,c.e);
@@ -1137,13 +1141,13 @@ function renderFillQ(){
   const opts=[...q.opts].sort(()=>Math.random()-.5);
   document.getElementById('gameBody').innerHTML=`
     <div style="text-align:center;margin-bottom:8px;">
-      <span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">✏️ ${session.qi+1}/${tot}</span>
+      <span style="font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;color:var(--muted);">✏️ ${session.qi+1}/${tot}</span>
     </div>
     <div class="choice-question">
       <div class="choice-img">${q.img}</div>
       <div class="choice-question-txt">${q.sent.replace('___','<span class="choice-blank">???</span>')}</div>
       <div style="margin-top:8px;font-size:.78rem;color:var(--muted);font-weight:700;">${q.ko}</div>
-      <button onclick="speakQ()" style="margin-top:8px;background:none;border:2px solid var(--mint);border-radius:999px;padding:5px 14px;font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--mint);cursor:pointer;">🔊 들어봐요</button>
+      <button onclick="speakQ()" style="margin-top:8px;background:none;border:2px solid var(--mint);border-radius:999px;padding:5px 14px;font-family:'Baloo 2','Jua',sans-serif;font-size:.82rem;color:var(--mint);cursor:pointer;">🔊 들어봐요</button>
     </div>
     <div class="choice-grid" id="fillOpts"></div>`;
   const og=document.getElementById('fillOpts');
@@ -1182,13 +1186,13 @@ function renderOXQ(){
   updProg();
   document.getElementById('gameBody').innerHTML=`
     <div style="text-align:center;margin-bottom:8px;">
-      <span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">⭕ ${session.qi+1}/${tot}</span>
+      <span style="font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;color:var(--muted);">⭕ ${session.qi+1}/${tot}</span>
     </div>
     <div class="ox-wrap">
       <div class="ox-question-card">
         <div class="ox-img">${q.img}</div>
         <div class="ox-sentence">${q.q}</div>
-        <button onclick="speak('${q.q.replace(/'/g,"\\'")}',0.8)" style="margin-top:8px;background:none;border:2px solid var(--mint);border-radius:999px;padding:5px 14px;font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--mint);cursor:pointer;">🔊 들어봐요</button>
+        <button onclick="speak('${q.q.replace(/'/g,"\\'")}',0.8)" style="margin-top:8px;background:none;border:2px solid var(--mint);border-radius:999px;padding:5px 14px;font-family:'Baloo 2','Jua',sans-serif;font-size:.82rem;color:var(--mint);cursor:pointer;">🔊 들어봐요</button>
       </div>
       <div class="ox-buttons">
         <button class="ox-btn ox-btn-o" onclick="checkOX(true)">⭕<div class="ox-lbl">맞아요!</div></button>
@@ -1219,7 +1223,7 @@ function renderListenQ(){
   const opts=[{e:q.e,w:q.w,ok:true},...(q.ds||[]).slice(0,3).map(d=>({e:d,w:'?',ok:false}))].sort(()=>Math.random()-.5);
   document.getElementById('gameBody').innerHTML=`
     <div style="text-align:center;margin-bottom:8px;">
-      <span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">👂 ${session.qi+1}/${tot} · 소리 듣고 찾아요!</span>
+      <span style="font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;color:var(--muted);">👂 ${session.qi+1}/${tot} · 소리 듣고 찾아요!</span>
     </div>
     <div class="listen-card">
       <button class="listen-speaker-btn" id="speakerBtn" onclick="playListenWord()">🔊</button>
@@ -1268,17 +1272,17 @@ function renderBuildQ(){
   speak(q.full,.78,1.05);
   document.getElementById('gameBody').innerHTML=`
     <div style="text-align:center;margin-bottom:8px;">
-      <span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">🧩 ${session.qi+1}/${tot} · 문장을 만들어요!</span>
+      <span style="font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;color:var(--muted);">🧩 ${session.qi+1}/${tot} · 문장을 만들어요!</span>
     </div>
     <div class="build-wrap">
       <div class="build-target">
-        <div style="font-family:'Baloo 2',cursive;font-size:2.8rem;text-align:center;width:100%;margin-bottom:6px;">${q.img}</div>
-        <div class="build-slots" id="buildSlots"><span style="color:#FFB347;font-family:'Baloo 2',cursive;font-size:.88rem;opacity:.7;" id="buildPh">단어를 순서대로 눌러요!</span></div>
+        <div style="font-family:'Baloo 2','Jua',sans-serif;font-size:2.8rem;text-align:center;width:100%;margin-bottom:6px;">${q.img}</div>
+        <div class="build-slots" id="buildSlots"><span style="color:#FFB347;font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;opacity:.7;" id="buildPh">단어를 순서대로 눌러요!</span></div>
       </div>
-      <button onclick="speak('${(q.full).replace(/'/g,"\\'")}',0.78)" style="width:100%;padding:10px;border-radius:var(--r-md);background:rgba(78,205,196,.15);border:2.5px solid var(--mint);font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--mint);cursor:pointer;margin-bottom:10px;">🔊 다시 들어요</button>
+      <button onclick="speak('${(q.full).replace(/'/g,"\\'")}',0.78)" style="width:100%;padding:10px;border-radius:var(--r-md);background:rgba(78,205,196,.15);border:2.5px solid var(--mint);font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;color:var(--mint);cursor:pointer;margin-bottom:10px;">🔊 다시 들어요</button>
       <div class="build-tiles" id="buildTiles"></div>
       <button class="build-check-btn" id="buildCheckBtn" onclick="checkBuild()" disabled style="opacity:.4;">✅ 확인!</button>
-      <div id="buildMsg" style="text-align:center;min-height:20px;font-family:'Baloo 2',cursive;font-size:.88rem;margin-top:6px;"></div>
+      <div id="buildMsg" style="text-align:center;min-height:20px;font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;margin-top:6px;"></div>
     </div>`;
   renderBuildTiles();
 }
@@ -1350,11 +1354,11 @@ function renderVideo(){
       <div class="video-intro-txt">${l.city} 추천 영상</div>
       <div style="margin:8px 0;font-size:.78rem;color:var(--muted);">보고 나서 ✅ 버튼을 눌러요!</div>
       <div style="background:#F5F0EA;border-radius:var(--r-md);padding:12px;margin-top:8px;text-align:left;">
-        <div style="font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--text);margin-bottom:6px;">👀 이런 걸 찾아봐요!</div>
+        <div style="font-family:'Baloo 2','Jua',sans-serif;font-size:.82rem;color:var(--text);margin-bottom:6px;">👀 이런 걸 찾아봐요!</div>
         ${(m.points||[]).map(p=>`<div style="font-size:.8rem;color:var(--muted);padding:3px 0;">${p}</div>`).join('')}
       </div>
     </div>
-    <div id="vidArea"><div class="video-loading"><div class="video-loading-emoji">🔍</div><div style="font-family:'Baloo 2',cursive;font-size:.9rem;margin-top:8px;">영상 찾는 중...</div></div></div>`;
+    <div id="vidArea"><div class="video-loading"><div class="video-loading-emoji">🔍</div><div style="font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;margin-top:8px;">영상 찾는 중...</div></div></div>`;
   fetchVids(l.city,m.points||[]);
 }
 
@@ -1394,31 +1398,31 @@ function renderSpeechQ(){
   updProg((idx/tot*100));
   session.recMaxSec=30; session.recAttempts=session.recAttempts||0;
   document.getElementById('gameBody').innerHTML=`
-    <div style="text-align:center;margin-bottom:8px;"><span style="font-family:'Baloo 2',cursive;font-size:.88rem;color:var(--muted);">🎤 ${idx+1}/${tot}</span></div>
+    <div style="text-align:center;margin-bottom:8px;"><span style="font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;color:var(--muted);">🎤 ${idx+1}/${tot}</span></div>
     <div class="speech-wrap">
       <div class="speech-card">
         <div class="speech-img">${s.e}</div>
         <div class="speech-text">
-          <div class="eng" style="font-size:1.3rem;color:#C2410C;font-family:'Baloo 2',cursive;">${s.en}</div>
+          <div class="eng" style="font-size:1.3rem;color:#C2410C;font-family:'Baloo 2','Jua',sans-serif;">${s.en}</div>
           <div class="kor" style="font-size:.82rem;color:var(--muted);margin-top:4px;">${s.ko}</div>
         </div>
         <button class="native-btn" id="nativeBtn" onclick="playNative()" style="margin-top:12px;">🔊 원어민 발음 듣기</button>
       </div>
       <div style="background:#fff;border-radius:var(--r-xl);padding:18px;box-shadow:var(--card-shadow);text-align:center;">
-        <div style="font-family:'Baloo 2',cursive;font-size:.88rem;margin-bottom:6px;">🎤 따라 말하고 녹음해요! <span style="color:var(--orange);">(30초)</span></div>
+        <div style="font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;margin-bottom:6px;">🎤 따라 말하고 녹음해요! <span style="color:var(--orange);">(30초)</span></div>
         <div style="height:8px;background:#F0F0F0;border-radius:8px;overflow:hidden;margin-bottom:12px;">
           <div id="timerBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--mint),var(--orange));border-radius:8px;transition:width .5s linear;"></div>
         </div>
-        <div id="timerLabel" style="font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--muted);margin-bottom:10px;">준비 완료!</div>
+        <div id="timerLabel" style="font-family:'Baloo 2','Jua',sans-serif;font-size:.82rem;color:var(--muted);margin-bottom:10px;">준비 완료!</div>
         <div class="rec-area"><button class="rec-btn" id="recBtn" onclick="startSpeechRec()">🎤</button><div class="rec-lbl" id="recLbl">버튼을 눌러 녹음 시작!</div></div>
         <div class="rec-playback" id="recPlay" style="display:none;margin-top:10px;">
           <div class="rec-playback-row"><span style="font-size:.72rem;font-weight:800;color:#5B21B6;white-space:nowrap;">🎧 내 발음</span><audio id="recAudio" controls style="flex:1;height:32px;"></audio></div>
         </div>
         <div id="speechResult" style="display:none;margin-top:10px;">
-          <div id="speechResultMsg" style="font-family:'Baloo 2',cursive;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
+          <div id="speechResultMsg" style="font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
           <div style="display:flex;gap:8px;">
-            <button onclick="retrySpeech()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">🔄 다시 녹음</button>
-            <button onclick="spSubmit()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">✅ ${idx+1<tot?'다음!':'완료!'}</button>
+            <button onclick="retrySpeech()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;cursor:pointer;">🔄 다시 녹음</button>
+            <button onclick="spSubmit()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;cursor:pointer;">✅ ${idx+1<tot?'다음!':'완료!'}</button>
           </div>
         </div>
       </div>
@@ -1446,7 +1450,7 @@ function renderChant(){
   const m=LESSONS[curCity].missions[curMi];
   session.recMaxSec=30; session.recAttempts=0;
   document.getElementById('gameBody').innerHTML=`
-    <div style="text-align:center;margin-bottom:8px;"><div style="font-family:'Baloo 2',cursive;font-size:.9rem;color:var(--muted);">🎵 챈트 부르기</div></div>
+    <div style="text-align:center;margin-bottom:8px;"><div style="font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;color:var(--muted);">🎵 챈트 부르기</div></div>
     <div class="chant-card" id="chantCard">
       <div class="chant-img">${m.img||'🎵'}</div>
       <div class="chant-lines" id="chantLines">
@@ -1458,21 +1462,21 @@ function renderChant(){
       <button class="chant-listen-btn" onclick="playChantRhythmic()" style="flex:0 0 auto;min-width:48px;">🔁</button>
     </div>
     <div style="background:#fff;border-radius:var(--r-xl);padding:18px;box-shadow:var(--card-shadow);text-align:center;">
-      <div style="font-family:'Baloo 2',cursive;font-size:.88rem;margin-bottom:6px;">🎤 따라 불러봐요! <span style="color:var(--orange);">(30초)</span></div>
+      <div style="font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;margin-bottom:6px;">🎤 따라 불러봐요! <span style="color:var(--orange);">(30초)</span></div>
       <div style="height:8px;background:#F0F0F0;border-radius:8px;overflow:hidden;margin-bottom:10px;">
         <div id="timerBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--lav),var(--orange));border-radius:8px;transition:width .5s linear;"></div>
       </div>
-      <div id="timerLabel" style="font-family:'Baloo 2',cursive;font-size:.8rem;color:var(--muted);margin-bottom:8px;">챈트를 먼저 듣고 따라 불러요!</div>
+      <div id="timerLabel" style="font-family:'Baloo 2','Jua',sans-serif;font-size:.8rem;color:var(--muted);margin-bottom:8px;">챈트를 먼저 듣고 따라 불러요!</div>
       <button class="rec-btn" id="recBtn" onclick="startSpeechRec()">🎤</button>
       <div class="rec-lbl" id="recLbl">버튼 눌러 녹음!</div>
       <div class="rec-playback" id="recPlay" style="display:none;margin-top:8px;">
         <div class="rec-playback-row"><span style="font-size:.72rem;font-weight:800;color:#5B21B6;white-space:nowrap;">🎧 내 챈트</span><audio id="recAudio" controls style="flex:1;height:32px;"></audio></div>
       </div>
       <div id="speechResult" style="display:none;margin-top:10px;">
-        <div id="speechResultMsg" style="font-family:'Baloo 2',cursive;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
+        <div id="speechResultMsg" style="font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
         <div style="display:flex;gap:8px;">
-          <button onclick="retrySpeech()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">🔄 다시!</button>
-          <button onclick="session.wrong=[];missionDone()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">🎉 완료!</button>
+          <button onclick="retrySpeech()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;cursor:pointer;">🔄 다시!</button>
+          <button onclick="session.wrong=[];missionDone()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;cursor:pointer;">🎉 완료!</button>
         </div>
       </div>
     </div>`;
@@ -1483,7 +1487,7 @@ function renderMissionCard(){
   const m=LESSONS[curCity].missions[curMi];
   session.recMaxSec=30; session.recAttempts=0;
   document.getElementById('gameBody').innerHTML=`
-    <div style="text-align:center;margin-bottom:8px;"><div style="font-family:'Baloo 2',cursive;font-size:.9rem;color:var(--muted);">📋 미션 카드 · 30초 안에 읽어요!</div></div>
+    <div style="text-align:center;margin-bottom:8px;"><div style="font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;color:var(--muted);">📋 미션 카드 · 30초 안에 읽어요!</div></div>
     <div class="mission-card-wrap">
       <div class="mission-card-visual">
         <div class="mc-trophy">${m.img||'🏆'}</div>
@@ -1497,24 +1501,24 @@ function renderMissionCard(){
             </div>
           </div>`).join('')}
       </div>
-      <button id="mcListenAllBtn" onclick="mcListenAll()" style="width:100%;padding:12px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--mint),#2DC7BC);color:#fff;font-family:'Baloo 2',cursive;font-size:.95rem;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px;">🔊 전체 문장 듣기</button>
+      <button id="mcListenAllBtn" onclick="mcListenAll()" style="width:100%;padding:12px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--mint),#2DC7BC);color:#fff;font-family:'Baloo 2','Jua',sans-serif;font-size:.95rem;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px;">🔊 전체 문장 듣기</button>
       <div style="background:#fff;border-radius:var(--r-xl);padding:18px;text-align:center;box-shadow:var(--card-shadow);">
-        <div style="font-family:'Baloo 2',cursive;font-size:.88rem;margin-bottom:4px;">🎤 30초 안에 전부 말해봐요!</div>
-        <div style="font-size:.75rem;color:var(--orange);font-family:'Baloo 2',cursive;margin-bottom:10px;">"${m.rec}"</div>
+        <div style="font-family:'Baloo 2','Jua',sans-serif;font-size:.88rem;margin-bottom:4px;">🎤 30초 안에 전부 말해봐요!</div>
+        <div style="font-size:.75rem;color:var(--orange);font-family:'Baloo 2','Jua',sans-serif;margin-bottom:10px;">"${m.rec}"</div>
         <div style="height:10px;background:#F0F0F0;border-radius:8px;overflow:hidden;margin-bottom:8px;">
           <div id="timerBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--mint),var(--orange));border-radius:8px;transition:width .5s linear;"></div>
         </div>
-        <div id="timerLabel" style="font-family:'Baloo 2',cursive;font-size:.82rem;color:var(--muted);margin-bottom:10px;">먼저 문장을 들어보세요!</div>
+        <div id="timerLabel" style="font-family:'Baloo 2','Jua',sans-serif;font-size:.82rem;color:var(--muted);margin-bottom:10px;">먼저 문장을 들어보세요!</div>
         <button class="rec-btn" id="recBtn" onclick="startMCRec()">🎤</button>
         <div class="rec-lbl" id="recLbl">버튼 눌러 녹음 시작!</div>
         <div class="rec-playback" id="recPlay" style="display:none;margin-top:10px;">
           <div class="rec-playback-row"><span style="font-size:.72rem;font-weight:800;color:#5B21B6;white-space:nowrap;">🎧 내 목소리</span><audio id="recAudio" controls style="flex:1;height:32px;"></audio></div>
         </div>
         <div id="speechResult" style="display:none;margin-top:10px;">
-          <div id="speechResultMsg" style="font-family:'Baloo 2',cursive;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
+          <div id="speechResultMsg" style="font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;padding:10px;border-radius:12px;margin-bottom:8px;"></div>
           <div style="display:flex;gap:8px;">
-            <button onclick="retryMC()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">🔄 다시 도전!</button>
-            <button onclick="session.wrong=[];missionDone()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2',cursive;font-size:.9rem;cursor:pointer;">✅ 미션 완료!</button>
+            <button onclick="retryMC()" style="flex:1;padding:12px;border-radius:16px;border:none;background:#FFE5E5;color:var(--coral);font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;cursor:pointer;">🔄 다시 도전!</button>
+            <button onclick="session.wrong=[];missionDone()" style="flex:1;padding:12px;border-radius:16px;border:none;background:var(--mint);color:#fff;font-family:'Baloo 2','Jua',sans-serif;font-size:.9rem;cursor:pointer;">✅ 미션 완료!</button>
           </div>
         </div>
       </div>
@@ -1584,10 +1588,10 @@ function showResult({emoji,title,sub,xp,lvUp,fullClear,isReview}){
   body.innerHTML=`
     <div style="text-align:center;padding:24px 20px 16px;background:linear-gradient(135deg,#FFF9F0,#FFF3E0);border-radius:var(--r-xl);margin-bottom:16px;box-shadow:var(--card-shadow);">
       <div style="font-size:4.5rem;margin-bottom:6px;">${emoji}</div>
-      <div style="font-family:'Baloo 2',cursive;font-size:1.6rem;color:var(--text);margin-bottom:6px;">${title}</div>
+      <div style="font-family:'Baloo 2','Jua',sans-serif;font-size:1.6rem;color:var(--text);margin-bottom:6px;">${title}</div>
       <div style="font-size:.88rem;color:var(--muted);font-weight:700;white-space:pre-line;margin-bottom:12px;">${sub}</div>
-      <div style="display:inline-block;background:linear-gradient(135deg,var(--sun),var(--peach));border-radius:999px;padding:8px 20px;font-family:'Baloo 2',cursive;font-size:1.05rem;color:#fff;">⚡ +${xp} XP</div>
-      ${lvUp?`<div style="margin-top:8px;background:linear-gradient(135deg,var(--lavender),#9B59B6);border-radius:999px;padding:8px 20px;font-family:'Baloo 2',cursive;font-size:1rem;color:#fff;">🎊 Lv.${ST.lv} 달성!</div>`:''}
+      <div style="display:inline-block;background:linear-gradient(135deg,var(--sun),var(--peach));border-radius:999px;padding:8px 20px;font-family:'Baloo 2','Jua',sans-serif;font-size:1.05rem;color:#fff;">⚡ +${xp} XP</div>
+      ${lvUp?`<div style="margin-top:8px;background:linear-gradient(135deg,var(--lavender),#9B59B6);border-radius:999px;padding:8px 20px;font-family:'Baloo 2','Jua',sans-serif;font-size:1rem;color:#fff;">🎊 Lv.${ST.lv} 달성!</div>`:''}
     </div>
     <div id="resultBtns" style="display:flex;flex-direction:column;gap:10px;"></div>`;
 
@@ -1621,7 +1625,7 @@ function showResult({emoji,title,sub,xp,lvUp,fullClear,isReview}){
 }
 function makeBtn(txt,bg,col,fn){
   const b=document.createElement('button');
-  b.style.cssText=`padding:14px;border-radius:var(--r-lg);border:none;font-family:'Baloo 2',cursive;font-size:1rem;cursor:pointer;background:${bg};color:${col};box-shadow:0 4px 16px rgba(0,0,0,.1);transition:transform .15s;`;
+  b.style.cssText=`padding:14px;border-radius:var(--r-lg);border:none;font-family:'Baloo 2','Jua',sans-serif;font-size:1rem;cursor:pointer;background:${bg};color:${col};box-shadow:0 4px 16px rgba(0,0,0,.1);transition:transform .15s;`;
   b.textContent=txt;b.onclick=fn;
   b.addEventListener('mousedown',()=>b.style.transform='scale(.97)');
   b.addEventListener('mouseup',()=>b.style.transform='');
