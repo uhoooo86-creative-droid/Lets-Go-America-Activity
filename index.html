@@ -760,6 +760,7 @@ function toast(msg,emoji='✨'){
   setTimeout(()=>el.classList.remove('show'),1800);
 }
 
+let fbTimer=null;
 function showFb(ok,msg=''){
   clearTimeout(fbTimer);
   const ov=document.getElementById('fbOverlay');
@@ -1427,7 +1428,8 @@ function renderSpeechQ(){
 
 function playNative(){
   const m=LESSONS[curCity].missions[curMi];
-  const s=m.sents[session.spIdx];
+  const s=m&&m.sents?m.sents[session.spIdx]:null;
+  if(!s)return;
   const btn=document.getElementById('nativeBtn');
   if(btn){btn.classList.add('playing');setTimeout(()=>{if(btn)btn.classList.remove('playing');},900);}
   speakNatural(s.en);
